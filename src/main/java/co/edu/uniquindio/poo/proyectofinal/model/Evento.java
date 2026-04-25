@@ -17,8 +17,11 @@ public  class Evento {
     private List<Administrador> listAdministradores;
     private List<Recinto> listRecintos;
     private List<Entrada> listEntradas;
+    private CategoriaEvento categoriaEvento;
+    private EstadoEvento estadoEvento;
+    private PoliticaEvento politicaEvento;
 
-    private Evento(String idEvento, String nombre, String descripcion, String ciudad, String fecha, String hora){
+    private Evento(String idEvento, String nombre, String descripcion, String ciudad, String fecha, String hora, CategoriaEvento categoriaEvento, EstadoEvento estadoEvento, PoliticaEvento politicaEvento){
         this.idEvento = idEvento;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -30,6 +33,9 @@ public  class Evento {
         this.listAdministradores = new ArrayList<>();
         this.listRecintos = new ArrayList<>();
         this.listEntradas = new ArrayList<>();
+        this.categoriaEvento = categoriaEvento;
+        this.estadoEvento = estadoEvento;
+        this.politicaEvento = politicaEvento;
     }
 
     public Evento getInstance() {
@@ -126,5 +132,29 @@ public  class Evento {
 
     public void setListEntradas(List<Entrada> listEntradas) {
         this.listEntradas = listEntradas;
+    }
+
+    public CategoriaEvento getCategoriaEvento() {
+        return categoriaEvento;
+    }
+
+    public void setCategoriaEvento(CategoriaEvento categoriaEvento) {
+        this.categoriaEvento = categoriaEvento;
+    }
+
+    public EstadoEvento getEstadoEvento() {
+        return estadoEvento;
+    }
+
+    public void setEstadoEvento(EstadoEvento estadoEvento) {
+        this.estadoEvento = estadoEvento;
+    }
+
+    public PoliticaEvento getPoliticaEvento() {
+        return politicaEvento;
+    }
+
+    public void setPoliticaEvento(PoliticaEvento politicaEvento) {
+        this.politicaEvento = politicaEvento;
     }
 }
