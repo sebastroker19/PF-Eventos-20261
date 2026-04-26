@@ -1,6 +1,11 @@
 package co.edu.uniquindio.poo.proyectofinal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Compra {
+
+    //Atributos Propios de la Clase
 
     private String idCompra;
     private String fechaCreacion;
@@ -9,6 +14,8 @@ public class Compra {
     private EstadoCompra estadoCompra;
     private List<Incidencia> listIncidencias;
 
+
+    //Constructor de la Clase
 
     public Compra(String idCompra, String fechaCreacion, double total, Usuario usuario, EstadoCompra estadoCompra){
 
@@ -22,6 +29,8 @@ public class Compra {
 
     }
 
+
+    //Getters y Setters
 
     public String getIdCompra() {
         return idCompra;

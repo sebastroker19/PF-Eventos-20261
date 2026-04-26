@@ -2,12 +2,19 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 public class Incidencia {
 
+    //Atributos Propios de la Clase
+
     private String idIncidencia;
     private String tipo;
     private String descripcion;
     private String fecha;
+
+    // Relacion con el Enum
+
     private EntidadAfectada entidadAfectada;
 
+
+    //Constructor
 
     public Incidencia(String idIncidencia, String tipo, String descripcion, String fecha, EntidadAfectada entidadAfectada){
 
@@ -19,6 +26,10 @@ public class Incidencia {
 
 
     }
+
+
+    //Getters y Setters
+
 
     public String getIdIncidencia() {
         return idIncidencia;

@@ -2,11 +2,15 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 public class Entrada {
 
+    //Atributos Propios de la Clase
+
     private String idEntrada;
     private String precioFinal;
     private EstadoEntrada estadoEntrada;
     private Asiento asiento;
 
+
+    //Constructor de la Clase
 
     public Entrada(String idEntrada, String precioFinal, EstadoEntrada estadoEntrada, Asiento asiento){
 
@@ -15,6 +19,10 @@ public class Entrada {
         this.estadoEntrada = estadoEntrada;
         this.asiento = asiento;
     }
+
+
+    //Getters y Setters
+
 
     public String getIdEntrada() {
         return idEntrada;

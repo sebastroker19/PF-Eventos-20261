@@ -5,12 +5,19 @@ import java.util.List;
 
 public class Recinto {
 
+    //Atributos Propios de la Clase
+
     private String idRecinto;
     private String nombre;
     private String direccion;
     private String ciudad;
+
+    //Relacion con la Clase Zona
+
     private List<Zona> listZonas;
 
+
+    // Constructor
 
     public Recinto (String idRecinto, String nombre, String direccion, String ciudad){
 
@@ -20,6 +27,10 @@ public class Recinto {
         this.ciudad = ciudad;
         this.listZonas = new ArrayList<>();
     }
+
+
+    // Getters y Setters
+
 
     public String getIdRecinto() {
         return idRecinto;

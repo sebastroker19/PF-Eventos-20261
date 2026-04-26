@@ -5,12 +5,17 @@ import java.util.List;
 
 public class Zona {
 
+    // Atributos Propios de la Clase
+
     private String idZona;
     private String nombre;
     private int cantidad;
     private double precioBase;
     private SectorZona sectorZona;
     private List<Asiento> listAsientos;
+
+
+    // Constructor
 
     public Zona(String idZona, String nombre, int cantidad, double precioBase, SectorZona sectorZona){
 
@@ -21,6 +26,9 @@ public class Zona {
         this.sectorZona = sectorZona;
         this.listAsientos = new ArrayList<>();
     }
+
+    // Getters y Setters
+
 
     public String getIdZona() {
         return idZona;

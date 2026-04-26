@@ -5,6 +5,8 @@ import java.util.List;
 
 public  class Evento {
 
+    //Atributos Propios de la Clase
+
     private Evento instance;
     private String idEvento;
     private String nombre;
@@ -12,14 +14,23 @@ public  class Evento {
     private String ciudad;
     private String fecha;
     private String hora;
+
+    // Relaciones con las Clases
+
     private List<Usuario> listUsuarios;
     private List<Compra> listCompras;
     private List<Administrador> listAdministradores;
     private List<Recinto> listRecintos;
     private List<Entrada> listEntradas;
+
+    // Relaciones con los Enums
+
     private CategoriaEvento categoriaEvento;
     private EstadoEvento estadoEvento;
     private PoliticaEvento politicaEvento;
+
+
+    // Constructor
 
     private Evento(String idEvento, String nombre, String descripcion, String ciudad, String fecha, String hora, CategoriaEvento categoriaEvento, EstadoEvento estadoEvento, PoliticaEvento politicaEvento){
         this.idEvento = idEvento;
@@ -37,6 +48,10 @@ public  class Evento {
         this.estadoEvento = estadoEvento;
         this.politicaEvento = politicaEvento;
     }
+
+
+    // Getters y Setters
+
 
     public Evento getInstance() {
         return instance;

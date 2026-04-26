@@ -5,14 +5,21 @@ import java.util.List;
 
 public class Usuario {
 
+    // Atributos Propios de la Clase
+
     private String idUsuario;
     private String nombreCompleto;
     private String correo;
     private String numTelefono;
     private int edad;
     private String direccion;
+
+    // Relacion con la Clase Compra
+
     private List<Compra> listCompras;
 
+
+    //Constructor Builder
 
     public Usuario(Builder builder){
 
@@ -24,6 +31,10 @@ public class Usuario {
         this.direccion = builder.direccion;
         this.listCompras = builder.listCompras;
     }
+
+
+    //Getters y Setters
+
 
     public String getIdUsuario() {
         return idUsuario;
@@ -81,6 +92,7 @@ public class Usuario {
         this.listCompras = listCompras;
     }
 
+    //Clase Builder para implementar el patron
 
     public static class Builder{
 
@@ -91,6 +103,10 @@ public class Usuario {
         private int edad;
         private String direccion;
         private List<Compra> listCompras = new ArrayList<>();
+
+
+        // Metodos tipo Setter
+
 
         public Builder idUsuario(String idUsuario){
             this.idUsuario = idUsuario;
@@ -126,6 +142,10 @@ public class Usuario {
             this.listCompras.add(compra);
             return this;
         }
+
+
+        // Metodo build
+
 
         public Usuario build(){
             return new Usuario(this);

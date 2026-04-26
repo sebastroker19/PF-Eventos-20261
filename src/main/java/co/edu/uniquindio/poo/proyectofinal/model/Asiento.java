@@ -2,11 +2,17 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 public class Asiento {
 
+
+    //Atributos Propios de la clase
+
     private String idAsiento;
     private String fila;
     private int numero;
     private EstadoAsiento estadoAsiento;
     private Entrada entrada;
+
+
+    //Constructor de la clase
 
     public Asiento(String idAsiento, String fila, int numero, EstadoAsiento estadoAsiento,Entrada entrada){
 
@@ -17,6 +23,10 @@ public class Asiento {
         this.entrada = entrada;
 
     }
+
+
+    // Getters y Setters
+
 
     public String getIdAsiento() {
         return idAsiento;

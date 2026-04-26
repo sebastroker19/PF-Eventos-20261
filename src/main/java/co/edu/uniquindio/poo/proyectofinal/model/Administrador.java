@@ -2,10 +2,15 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 public class Administrador {
 
+    //Atributos Propios de la clase
+
     private String idAdministrador;
     private String nombreCompleto;
     private String correo;
     private String numTelefono;
+
+
+    //Constructor de la clase
 
     public Administrador(String idAdministrador, String nombreCompleto, String correo, String numTelefono){
         this.idAdministrador = idAdministrador;
@@ -14,6 +19,10 @@ public class Administrador {
         this.numTelefono = numTelefono;
 
     }
+
+
+    // Getters y Setters
+
 
     public String getIdAdministrador() {
         return idAdministrador;
