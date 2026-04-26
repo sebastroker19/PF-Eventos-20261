@@ -152,6 +152,22 @@ public class Usuario {
         }
     }
 
+
+    //Metodo toString
+
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idUsuario='" + idUsuario + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", correo='" + correo + '\'' +
+                ", numTelefono='" + numTelefono + '\'' +
+                ", edad=" + edad +
+                ", direccion='" + direccion + '\'' +
+                ", listCompras=" + listCompras +
+                '}';
+    }
 }
 
 

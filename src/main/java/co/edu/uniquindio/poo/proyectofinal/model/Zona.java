@@ -77,4 +77,19 @@ public class Zona {
     public void setListAsientos(List<Asiento> listAsientos) {
         this.listAsientos = listAsientos;
     }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Zona{" +
+                "idZona='" + idZona + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", cantidad=" + cantidad +
+                ", precioBase=" + precioBase +
+                ", sectorZona=" + sectorZona +
+                ", listAsientos=" + listAsientos +
+                '}';
+    }
 }

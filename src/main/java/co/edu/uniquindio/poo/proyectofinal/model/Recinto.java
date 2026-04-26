@@ -71,4 +71,18 @@ public class Recinto {
     public void setListZonas(List<Zona> listZonas) {
         this.listZonas = listZonas;
     }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Recinto{" +
+                "idRecinto='" + idRecinto + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                ", listZonas=" + listZonas +
+                '}';
+    }
 }

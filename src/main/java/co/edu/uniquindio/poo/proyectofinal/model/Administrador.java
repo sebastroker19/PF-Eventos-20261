@@ -1,6 +1,6 @@
 package co.edu.uniquindio.poo.proyectofinal.model;
 
-public class Administrador {
+public class Administrador implements Cloneable {
 
     //Atributos Propios de la clase
 
@@ -18,6 +18,12 @@ public class Administrador {
         this.correo = correo;
         this.numTelefono = numTelefono;
 
+    }
+
+    // Metodo para clonar de el Patron Prototype
+
+    public Administrador clone() throws CloneNotSupportedException {
+        return (Administrador) super.clone();
     }
 
 
@@ -54,5 +60,18 @@ public class Administrador {
 
     public void setNumTelefono(String numTelefono) {
         this.numTelefono = numTelefono;
+    }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Administrador{" +
+                "idAdministrador='" + idAdministrador + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", correo='" + correo + '\'' +
+                ", numTelefono='" + numTelefono + '\'' +
+                '}';
     }
 }

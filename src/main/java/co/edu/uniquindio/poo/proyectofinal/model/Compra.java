@@ -79,4 +79,21 @@ public class Compra {
     public void setListIncidencias(List<Incidencia> listIncidencias) {
         this.listIncidencias = listIncidencias;
     }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Compra{" +
+                "idCompra='" + idCompra + '\'' +
+                ", fechaCreacion='" + fechaCreacion + '\'' +
+                ", total=" + total +
+                ", usuario=" + usuario +
+                ", estadoCompra=" + estadoCompra +
+                ", listIncidencias=" + listIncidencias +
+                '}';
+    }
 }
+
+

@@ -55,4 +55,17 @@ public class Entrada {
     public void setAsiento(Asiento asiento) {
         this.asiento = asiento;
     }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Entrada{" +
+                "idEntrada='" + idEntrada + '\'' +
+                ", precioFinal='" + precioFinal + '\'' +
+                ", estadoEntrada=" + estadoEntrada +
+                ", asiento=" + asiento +
+                '}';
+    }
 }

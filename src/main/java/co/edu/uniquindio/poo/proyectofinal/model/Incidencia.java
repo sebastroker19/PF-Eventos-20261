@@ -70,4 +70,18 @@ public class Incidencia {
     public void setEntidadAfectada(EntidadAfectada entidadAfectada) {
         this.entidadAfectada = entidadAfectada;
     }
+
+
+    //Metodo toString
+
+    @Override
+    public String toString() {
+        return "Incidencia{" +
+                "idIncidencia='" + idIncidencia + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", entidadAfectada=" + entidadAfectada +
+                '}';
+    }
 }

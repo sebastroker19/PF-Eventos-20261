@@ -172,4 +172,28 @@ public  class Evento {
     public void setPoliticaEvento(PoliticaEvento politicaEvento) {
         this.politicaEvento = politicaEvento;
     }
+
+
+    // Metodo toString
+
+    @Override
+    public String toString() {
+        return "Evento{" +
+                "instance=" + instance +
+                ", idEvento='" + idEvento + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", hora='" + hora + '\'' +
+                ", listUsuarios=" + listUsuarios +
+                ", listCompras=" + listCompras +
+                ", listAdministradores=" + listAdministradores +
+                ", listRecintos=" + listRecintos +
+                ", listEntradas=" + listEntradas +
+                ", categoriaEvento=" + categoriaEvento +
+                ", estadoEvento=" + estadoEvento +
+                ", politicaEvento=" + politicaEvento +
+                '}';
+    }
 }
