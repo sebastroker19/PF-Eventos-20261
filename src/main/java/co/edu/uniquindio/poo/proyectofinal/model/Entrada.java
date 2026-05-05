@@ -20,6 +20,37 @@ public class Entrada {
     }
 
 
+    //metodo para anular asientos
+
+    public boolean anular() {
+        if (estadoEntrada != EstadoEntrada.ACTIVA) {
+            System.out.println("Solo se puede anular una entrada ACTIVA.");
+            return false;
+        }
+        estadoEntrada = EstadoEntrada.ANULADA;
+        if (asiento != null) {
+            asiento.liberar();
+        }
+        return true;
+    }
+
+    //metodo para marcar entradas como usadas
+
+    public boolean marcarUsada() {
+        if (estadoEntrada != EstadoEntrada.ACTIVA) {
+            System.out.println("Solo se puede usar una entrada ACTIVA.");
+            return false;
+        }
+        estadoEntrada = EstadoEntrada.USADA;
+        return true;
+    }
+
+    //metodo para calcular el precio final
+
+    public void calcularPrecioFinal(double precioBase, double adicional) {
+        this.precioFinal = precioBase + adicional;
+    }
+
     //Getters y Setters
 
     public String getIdEntrada() {
