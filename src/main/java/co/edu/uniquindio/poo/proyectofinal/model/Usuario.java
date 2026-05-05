@@ -33,8 +33,58 @@ public class Usuario {
     }
 
 
-    //Getters y Setters
+    // metodo para agregar una compra al historial del usuario
 
+    public void agregarCompra(Compra compra) {
+        listCompras.add(compra);
+    }
+
+    // metodo para retorna las compras del mismo estado
+
+    public List<Compra> getComprasPorEstado(EstadoCompra estado) {
+        if (estado == null) {
+            return listCompras;
+        }
+        List<Compra> resultado = new ArrayList<>();
+        for (Compra c : listCompras) {
+            if (c.getEstadoCompra() == estado) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
+    // metodo para retornar las compras asociadas a un evento por su id.
+
+    public List<Compra> getComprasPorEvento(String idEvento) {
+        List<Compra> resultado = new ArrayList<>();
+        for (Compra c : listCompras) {
+            if (c.getEvento() != null && c.getEvento().getIdEvento().equals(idEvento)) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
+    // metodo para verificar los datos necesarios del usuario
+
+    public boolean validarDatos() {
+        if (idUsuario == null || idUsuario.isBlank()) {
+            System.out.println("El id del usuario es obligatorio.");
+            return false;
+        }
+        if (nombreCompleto == null || nombreCompleto.isBlank()) {
+            System.out.println("El nombre completo es obligatorio.");
+            return false;
+        }
+        if (correo == null || correo.isBlank()) {
+            System.out.println("El correo es obligatorio.");
+            return false;
+        }
+        return true;
+    }
+
+    //Getters y Setters
 
     public String getIdUsuario() {
         return idUsuario;
@@ -105,8 +155,7 @@ public class Usuario {
         private List<Compra> listCompras = new ArrayList<>();
 
 
-        // Metodos tipo Setter
-
+        // Metodos tipo Setter del builder
 
         public Builder idUsuario(String idUsuario){
             this.idUsuario = idUsuario;
@@ -143,18 +192,14 @@ public class Usuario {
             return this;
         }
 
-
         // Metodo build
-
 
         public Usuario build(){
             return new Usuario(this);
         }
     }
 
-
     //Metodo toString
-
 
     @Override
     public String toString() {
@@ -169,18 +214,3 @@ public class Usuario {
                 '}';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

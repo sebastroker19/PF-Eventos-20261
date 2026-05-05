@@ -50,7 +50,6 @@ public class Asiento {
         return estadoAsiento == EstadoAsiento.DISPONIBLE;
     }
 
-
     // Getters y Setters
 
     public String getIdAsiento() {

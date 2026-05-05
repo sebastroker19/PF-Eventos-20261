@@ -27,8 +27,51 @@ public class Zona {
         this.listAsientos = new ArrayList<>();
     }
 
-    // Getters y Setters
+    // Metodo para agrega un asiento a la zona
 
+    public boolean agregarAsiento(Asiento asiento) {
+        if (listAsientos.size() >= cantidad) {
+            System.out.println("La zona " + nombre + " ya alcanzo su capacidad maxima.");
+            return false;
+        }
+        listAsientos.add(asiento);
+        return true;
+    }
+
+    // Metodo para retorna una lista solo con los asientos en estado DISPONIBLE.
+
+    public List<Asiento> getAsientosDisponibles() {
+        List<Asiento> disponibles = new ArrayList<>();
+        for (Asiento a : listAsientos) {
+            if (a.estaDisponible()) {
+                disponibles.add(a);
+            }
+        }
+        return disponibles;
+    }
+
+    // Metodo para retornar el porcentaje de asientos ocupados.
+
+    public double getPorcentajeOcupacion() {
+        if (cantidad == 0) {
+            return 0;
+        }
+        int ocupados = 0;
+        for (Asiento a : listAsientos) {
+            if (!a.estaDisponible()) {
+                ocupados++;
+            }
+        }
+        return (ocupados * 100.0) / cantidad;
+    }
+
+    // Metodo para verificar si hay asientos disponibles
+
+    public boolean tieneCapacidad() {
+        return !getAsientosDisponibles().isEmpty();
+    }
+
+    // Getters y Setters
 
     public String getIdZona() {
         return idZona;
@@ -77,7 +120,6 @@ public class Zona {
     public void setListAsientos(List<Asiento> listAsientos) {
         this.listAsientos = listAsientos;
     }
-
 
     //Metodo toString
 
