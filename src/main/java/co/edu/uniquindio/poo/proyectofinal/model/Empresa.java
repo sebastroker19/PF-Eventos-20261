@@ -36,7 +36,7 @@ public final class Empresa {
         return instance;
     }
 
-    // Métodos para registrar usuarios
+    // Método para registrar usuarios
 
     public boolean registrarUsuario(Usuario usuario) {
         for (Usuario u : listUsuarios) {
@@ -48,7 +48,7 @@ public final class Empresa {
         return true;
     }
 
-    // Métodos para registrar eventos
+    // Método para registrar eventos
 
     public boolean registrarEvento(Evento evento) {
         for (Evento e : listEventos) {
@@ -60,7 +60,7 @@ public final class Empresa {
         return true;
     }
 
-    // Métodos para bsuacr usuarios
+    // Método para buscar usuarios
 
     public Usuario buscarUsuario(String idUsuario) {
         for (Usuario u : listUsuarios) {
@@ -69,7 +69,7 @@ public final class Empresa {
         return null;
     }
 
-    // Métodos para  buscar eventos
+    // Método para  buscar eventos
 
     public Evento buscarEvento(String idEvento) {
         for (Evento e : listEventos) {
