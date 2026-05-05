@@ -13,7 +13,6 @@ public class Incidencia {
 
     private EntidadAfectada entidadAfectada;
 
-
     //Constructor
 
     public Incidencia(String idIncidencia, String tipo, String descripcion, String fecha, EntidadAfectada entidadAfectada){
@@ -24,12 +23,9 @@ public class Incidencia {
         this.fecha = fecha;
         this.entidadAfectada = entidadAfectada;
 
-
     }
 
-
     //Getters y Setters
-
 
     public String getIdIncidencia() {
         return idIncidencia;

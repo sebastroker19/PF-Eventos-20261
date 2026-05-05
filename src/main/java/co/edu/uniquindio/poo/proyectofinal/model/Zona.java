@@ -14,7 +14,6 @@ public class Zona {
     private SectorZona sectorZona;
     private List<Asiento> listAsientos;
 
-
     // Constructor
 
     public Zona(String idZona, String nombre, int cantidad, double precioBase, SectorZona sectorZona){
