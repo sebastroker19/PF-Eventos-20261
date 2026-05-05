@@ -48,4 +48,12 @@ public final class Empresa {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "nombre='" + nombre + '\'' +
+                ", nit='" + nit + '\'' +
+                '}';
+    }
 }
