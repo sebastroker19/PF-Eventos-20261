@@ -29,8 +29,41 @@ public class Recinto {
     }
 
 
-    // Getters y Setters
+    // Metodo para agregar zonas
 
+    public boolean agregarZona(Zona zona) {
+        for (Zona z : listZonas) {
+            if (z.getIdZona().equals(zona.getIdZona())) {
+                System.out.println("Ya existe una zona con ese id en el recinto.");
+                return false;
+            }
+        }
+        listZonas.add(zona);
+        return true;
+    }
+
+    // Metodo para llamar las zonas de un sector
+
+    public Zona getZonaPorSector(SectorZona sector) {
+        for (Zona z : listZonas) {
+            if (z.getSectorZona() == sector) {
+                return z;
+            }
+        }
+        return null;
+    }
+
+    // Metodo para sumar la capacidad de todas las zonas del recinto.
+
+    public int getCapacidadTotal() {
+        int total = 0;
+        for (Zona z : listZonas) {
+            total += z.getCantidad();
+        }
+        return total;
+    }
+
+    // Getters y Setters
 
     public String getIdRecinto() {
         return idRecinto;
@@ -71,7 +104,6 @@ public class Recinto {
     public void setListZonas(List<Zona> listZonas) {
         this.listZonas = listZonas;
     }
-
 
     //Metodo toString
 
