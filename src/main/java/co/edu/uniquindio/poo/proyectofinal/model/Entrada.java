@@ -5,15 +5,14 @@ public class Entrada {
     //Atributos Propios de la Clase
 
     private String idEntrada;
-    private String precioFinal;
+    private double precioFinal;
     private EstadoEntrada estadoEntrada;
     private Asiento asiento;
 
 
     //Constructor de la Clase
 
-    public Entrada(String idEntrada, String precioFinal, EstadoEntrada estadoEntrada, Asiento asiento){
-
+    public Entrada(String idEntrada, double precioFinal, EstadoEntrada estadoEntrada, Asiento asiento) {
         this.idEntrada = idEntrada;
         this.precioFinal = precioFinal;
         this.estadoEntrada = estadoEntrada;
@@ -23,7 +22,6 @@ public class Entrada {
 
     //Getters y Setters
 
-
     public String getIdEntrada() {
         return idEntrada;
     }
@@ -32,11 +30,11 @@ public class Entrada {
         this.idEntrada = idEntrada;
     }
 
-    public String getPrecioFinal() {
+    public double getPrecioFinal() {
         return precioFinal;
     }
 
-    public void setPrecioFinal(String precioFinal) {
+    public void setPrecioFinal(double precioFinal) {
         this.precioFinal = precioFinal;
     }
 
@@ -63,7 +61,7 @@ public class Entrada {
     public String toString() {
         return "Entrada{" +
                 "idEntrada='" + idEntrada + '\'' +
-                ", precioFinal='" + precioFinal + '\'' +
+                ", precioFinal=" + precioFinal +
                 ", estadoEntrada=" + estadoEntrada +
                 ", asiento=" + asiento +
                 '}';

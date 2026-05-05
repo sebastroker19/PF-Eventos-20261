@@ -3,9 +3,9 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class Evento {
+public class Evento {
 
-    //Atributos Propios de la Clase
+    // Atributos originales de Evento
 
     private Evento instance;
     private String idEvento;
@@ -15,22 +15,17 @@ public  class Evento {
     private String fecha;
     private String hora;
 
-    // Relaciones con las Clases
-
     private List<Usuario> listUsuarios;
     private List<Compra> listCompras;
     private List<Administrador> listAdministradores;
     private List<Recinto> listRecintos;
     private List<Entrada> listEntradas;
 
-    // Relaciones con los Enums
-
     private CategoriaEvento categoriaEvento;
     private EstadoEvento estadoEvento;
     private PoliticaEvento politicaEvento;
 
-
-    // Constructor
+    // Constructor de la clase evento
 
     private Evento(String idEvento, String nombre, String descripcion, String ciudad, String fecha, String hora, CategoriaEvento categoriaEvento, EstadoEvento estadoEvento, PoliticaEvento politicaEvento){
         this.idEvento = idEvento;
@@ -50,8 +45,91 @@ public  class Evento {
     }
 
 
-    // Getters y Setters
+    /**
+     * Agrega una compra al evento solo si este se encuentra PUBLICADO.
+     * Si el evento está en BORRADOR, PAUSADO o CANCELADO, la compra no se procesa.
+     */
+    public boolean agregarCompra(Compra compra) {
+        if (compra == null) {
+            System.out.println("Error: La compra no puede ser nula.");
+            return false;
+        }
 
+        if (this.estadoEvento != EstadoEvento.PUBLICADO) {
+            System.out.println("Error: No se pueden agregar compras a un evento en estado " + estadoEvento);
+            return false;
+        }
+
+        listCompras.add(compra);
+        System.out.println("Compra agregada exitosamente al evento: " + nombre);
+        return true;
+    }
+
+    //Metodo para crear evento
+
+    public static Evento crear(String idEvento, String nombre, String descripcion,
+                               String ciudad, String fecha, String hora,
+                               CategoriaEvento categoriaEvento, PoliticaEvento politicaEvento) {
+        if (idEvento == null || idEvento.isBlank() || nombre == null || nombre.isBlank()) {
+            return null;
+        }
+        return new Evento(idEvento, nombre, descripcion, ciudad, fecha, hora,
+                categoriaEvento, EstadoEvento.BORRADOR, politicaEvento);
+    }
+
+    //Metodo para publicar evento
+
+    public boolean publicar() {
+        if (estadoEvento != EstadoEvento.BORRADOR || listRecintos.isEmpty()) {
+            return false;
+        }
+        estadoEvento = EstadoEvento.PUBLICADO;
+        return true;
+    }
+
+    //Metodo para pausar evento
+
+    public boolean pausar() {
+        if (estadoEvento != EstadoEvento.PUBLICADO) {
+            return false;
+        }
+        estadoEvento = EstadoEvento.PAUSADO;
+        return true;
+    }
+
+    //Metodo para cancelar evento
+
+    public boolean cancelar() {
+        if (estadoEvento == EstadoEvento.CANCELADO || estadoEvento == EstadoEvento.FINALIZADO) {
+            return false;
+        }
+        estadoEvento = EstadoEvento.CANCELADO;
+        for (Compra c : listCompras) {
+            c.cancelar(); // Lógica de cancelación en cascada[cite: 2]
+        }
+        return true;
+    }
+
+    //Metodo para ver disponiblidad por zonas
+
+    public List<String> getDisponibilidadZonas() {
+        List<String> disponibilidad = new ArrayList<>();
+        for (Recinto recinto : listRecintos) {
+            for (Zona zona : recinto.getListZonas()) {
+                int libres = 0;
+                for (Asiento a : zona.getListAsientos()) {
+                    if (a.estaDisponible()) libres++;
+                }
+                disponibilidad.add(zona.getNombre() + ": " + libres);
+            }
+        }
+        return disponibilidad;
+    }
+
+    /**
+     * metodos get y set
+     * @return
+     */
 
     public Evento getInstance() {
         return instance;
@@ -172,9 +250,6 @@ public  class Evento {
     public void setPoliticaEvento(PoliticaEvento politicaEvento) {
         this.politicaEvento = politicaEvento;
     }
-
-
-    // Metodo toString
 
     @Override
     public String toString() {
