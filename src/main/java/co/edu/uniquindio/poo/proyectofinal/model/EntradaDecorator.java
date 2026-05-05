@@ -6,7 +6,7 @@ public abstract class EntradaDecorator implements IEntrada {
 
     //Constructor de la clase
 
-    private EntradaDecorator(IEntrada entrada){
+    public EntradaDecorator(IEntrada entrada){
         this.entrada = entrada;
     }
 
