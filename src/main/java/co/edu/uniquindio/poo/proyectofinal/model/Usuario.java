@@ -3,13 +3,14 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Usuario {
+public class Usuario implements OperacionesUsuario{
 
     // Atributos Propios de la Clase
 
     private String idUsuario;
     private String nombreCompleto;
     private String correo;
+    private String clave;
     private String numTelefono;
     private int edad;
     private String direccion;
@@ -17,6 +18,7 @@ public class Usuario {
     // Relacion con la Clase Compra
 
     private List<Compra> listCompras;
+    private List<EstrategiaPago>metodosPago = new ArrayList<>();
 
 
     //Constructor Builder
@@ -26,6 +28,7 @@ public class Usuario {
         this.idUsuario = builder.idUsuario;
         this.nombreCompleto = builder.nombreCompleto;
         this.correo = builder.correo;
+        this.clave = builder.clave;
         this.numTelefono = builder.numTelefono;
         this.edad = builder.edad;
         this.direccion = builder.direccion;
@@ -33,58 +36,10 @@ public class Usuario {
     }
 
 
-    // metodo para agregar una compra al historial del usuario
 
-    public void agregarCompra(Compra compra) {
-        listCompras.add(compra);
-    }
-
-    // metodo para retorna las compras del mismo estado
-
-    public List<Compra> getComprasPorEstado(EstadoCompra estado) {
-        if (estado == null) {
-            return listCompras;
-        }
-        List<Compra> resultado = new ArrayList<>();
-        for (Compra c : listCompras) {
-            if (c.getEstadoCompra() == estado) {
-                resultado.add(c);
-            }
-        }
-        return resultado;
-    }
-
-    // metodo para retornar las compras asociadas a un evento por su id.
-
-    public List<Compra> getComprasPorEvento(String idEvento) {
-        List<Compra> resultado = new ArrayList<>();
-        for (Compra c : listCompras) {
-            if (c.getEvento() != null && c.getEvento().getIdEvento().equals(idEvento)) {
-                resultado.add(c);
-            }
-        }
-        return resultado;
-    }
-
-    // metodo para verificar los datos necesarios del usuario
-
-    public boolean validarDatos() {
-        if (idUsuario == null || idUsuario.isBlank()) {
-            System.out.println("El id del usuario es obligatorio.");
-            return false;
-        }
-        if (nombreCompleto == null || nombreCompleto.isBlank()) {
-            System.out.println("El nombre completo es obligatorio.");
-            return false;
-        }
-        if (correo == null || correo.isBlank()) {
-            System.out.println("El correo es obligatorio.");
-            return false;
-        }
-        return true;
-    }
 
     //Getters y Setters
+
 
     public String getIdUsuario() {
         return idUsuario;
@@ -142,10 +97,52 @@ public class Usuario {
         this.listCompras = listCompras;
     }
 
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public List<EstrategiaPago> getMetodosPago() {
+        return metodosPago;
+    }
+
+    public void setMetodosPago(List<EstrategiaPago> metodosPago) {
+        this.metodosPago = metodosPago;
+    }
+
+    // se sobreescribe los metodos que implementa del operacionesUsuario
+    @Override
+    public boolean iniciarSesion(String correo, String clave) {
+        return this.correo.equals(correo)&&"Password123".equals(clave);
+    }
+
+    @Override
+    public void actualizarPerfil(String nombre, String correo, String telefono) {
+        this.nombreCompleto = nombre;
+        this.correo = correo;
+        this.numTelefono = telefono;
+        System.out.println("Usuario actualizado en la base de datos"+this.idUsuario);
+
+    }
+
+    @Override
+    public void agregarMetodoPago(EstrategiaPago metodo) {
+        this.metodosPago.add(metodo);
+    }
+
+    @Override
+    public List<Compra> consultarHistorialCompra() {
+        return this.listCompras;
+    }
+
     //Clase Builder para implementar el patron
 
     public static class Builder{
 
+        public String clave;
         private String idUsuario;
         private String nombreCompleto;
         private String correo;
@@ -155,10 +152,15 @@ public class Usuario {
         private List<Compra> listCompras = new ArrayList<>();
 
 
-        // Metodos tipo Setter del builder
+        // Metodos tipo Setter
+
 
         public Builder idUsuario(String idUsuario){
             this.idUsuario = idUsuario;
+            return this;
+        }
+        public Builder clave(String clave){
+            this.clave = clave;
             return this;
         }
 
@@ -187,19 +189,23 @@ public class Usuario {
             return this;
         }
 
-        public Builder listCompras(Compra compra){
+        public Builder agregarCompra(Compra compra){
             this.listCompras.add(compra);
             return this;
         }
 
+
         // Metodo build
+
 
         public Usuario build(){
             return new Usuario(this);
         }
     }
 
+
     //Metodo toString
+
 
     @Override
     public String toString() {
