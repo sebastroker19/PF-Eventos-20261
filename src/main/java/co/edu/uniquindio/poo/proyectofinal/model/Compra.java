@@ -11,22 +11,89 @@ public class Compra {
     private String fechaCreacion;
     private double total;
     private Usuario usuario;
+    private Evento evento;
     private EstadoCompra estadoCompra;
+    private List<Entrada> listEntradas;
     private List<Incidencia> listIncidencias;
 
 
     //Constructor de la Clase
 
-    public Compra(String idCompra, String fechaCreacion, double total, Usuario usuario, EstadoCompra estadoCompra){
-
+    public Compra(String idCompra, String fechaCreacion, double total, Usuario usuario, Evento evento, EstadoCompra estadoCompra) {
         this.idCompra = idCompra;
         this.fechaCreacion = fechaCreacion;
-        this.total = total;
         this.usuario = usuario;
+        this.evento = evento;
         this.estadoCompra = estadoCompra;
+        this.total = 0;
+        this.estadoCompra = EstadoCompra.CREADA;
+        this.listEntradas = new ArrayList<>();
         this.listIncidencias = new ArrayList<>();
+    }
 
+    // Agrega una entrada a la compra y recalcula el total
+    // Solo funciona si la compra aun no fue pagada
 
+    public boolean agregarEntrada(Entrada entrada) {
+        if (!puedeModificarse()) {
+            System.out.println("La compra no puede modificarse en estado: " + estadoCompra);
+            return false;
+        }
+        listEntradas.add(entrada);
+        calcularTotal();
+        return true;
+    }
+
+    // Suma el precio de todas las entradas y actualiza el campo total
+
+    public void calcularTotal() {
+        double suma = 0;
+        for (Entrada e : listEntradas) {
+            suma += e.getPrecioFinal();
+        }
+        this.total = suma;
+    }
+
+    // Marca la compra como PAGADA y marca cada asiento como VENDIDO
+
+    public boolean confirmarPago() {
+        if (estadoCompra != EstadoCompra.CREADA) {
+            System.out.println("Solo se puede pagar una compra en estado CREADA.");
+            return false;
+        }
+        if (listEntradas.isEmpty()) {
+            System.out.println("La compra no tiene entradas.");
+            return false;
+        }
+        estadoCompra = EstadoCompra.PAGADA;
+        for (Entrada e : listEntradas) {
+            if (e.getAsiento() != null) {
+                e.getAsiento().setEstadoAsiento(EstadoAsiento.VENDIDO);
+            }
+        }
+        return true;
+    }
+
+    // Cancela la compra y libera los asientos reservados
+
+    public boolean cancelar() {
+        if (estadoCompra == EstadoCompra.CANCELADA || estadoCompra == EstadoCompra.REEMBOLSADA) {
+            System.out.println("La compra ya esta cancelada o reembolsada.");
+            return false;
+        }
+        estadoCompra = EstadoCompra.CANCELADA;
+        for (Entrada e : listEntradas) {
+            if (e.getAsiento() != null) {
+                e.getAsiento().liberar();
+            }
+        }
+        return true;
+    }
+
+    // Retorna true si la compra esta en estado CREADA (unico estado modificable)
+
+    public boolean puedeModificarse() {
+        return estadoCompra == EstadoCompra.CREADA;
     }
 
 
@@ -52,10 +119,6 @@ public class Compra {
         return total;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -64,12 +127,24 @@ public class Compra {
         this.usuario = usuario;
     }
 
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
     public EstadoCompra getEstadoCompra() {
         return estadoCompra;
     }
 
     public void setEstadoCompra(EstadoCompra estadoCompra) {
         this.estadoCompra = estadoCompra;
+    }
+
+    public List<Entrada> getListEntradas() {
+        return listEntradas;
     }
 
     public List<Incidencia> getListIncidencias() {
@@ -89,11 +164,8 @@ public class Compra {
                 "idCompra='" + idCompra + '\'' +
                 ", fechaCreacion='" + fechaCreacion + '\'' +
                 ", total=" + total +
-                ", usuario=" + usuario +
-                ", estadoCompra=" + estadoCompra +
-                ", listIncidencias=" + listIncidencias +
+                ", estado=" + estadoCompra +
+                ", entradas=" + listEntradas.size() +
                 '}';
     }
 }
-
-
