@@ -2,7 +2,6 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 public class Asiento {
 
-
     //Atributos Propios de la clase
 
     private String idAsiento;
@@ -14,19 +13,45 @@ public class Asiento {
 
     //Constructor de la clase
 
-    public Asiento(String idAsiento, String fila, int numero, EstadoAsiento estadoAsiento,Entrada entrada){
-
+    public Asiento(String idAsiento, String fila, int numero, EstadoAsiento estadoAsiento, Entrada entrada) {
         this.idAsiento = idAsiento;
         this.fila = fila;
         this.numero = numero;
         this.estadoAsiento = estadoAsiento;
         this.entrada = entrada;
+    }
 
+    // Marca el asiento como RESERVADO, solo si esta DISPONIBLE
+
+    public boolean reservar() {
+        if (estadoAsiento != EstadoAsiento.DISPONIBLE) {
+            System.out.println("El asiento " + fila + numero + " no esta disponible.");
+            return false;
+        }
+        estadoAsiento = EstadoAsiento.RESERVADO;
+        return true;
+    }
+
+    // Libera el asiento volviendo a DISPONIBLE (al cancelar una compra)
+
+    public boolean liberar() {
+        if (estadoAsiento == EstadoAsiento.VENDIDO) {
+            System.out.println("El asiento " + fila + numero + " ya fue vendido, no se puede liberar.");
+            return false;
+        }
+        estadoAsiento = EstadoAsiento.DISPONIBLE;
+        this.entrada = null;
+        return true;
+    }
+
+    // Retorna true si el asiento esta DISPONIBLE
+
+    public boolean estaDisponible() {
+        return estadoAsiento == EstadoAsiento.DISPONIBLE;
     }
 
 
     // Getters y Setters
-
 
     public String getIdAsiento() {
         return idAsiento;
@@ -77,8 +102,7 @@ public class Asiento {
                 "idAsiento='" + idAsiento + '\'' +
                 ", fila='" + fila + '\'' +
                 ", numero=" + numero +
-                ", estadoAsiento=" + estadoAsiento +
-                ", entrada=" + entrada +
+                ", estado=" + estadoAsiento +
                 '}';
     }
 }
