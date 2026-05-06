@@ -16,18 +16,15 @@ public class Recinto {
 
     private List<Zona> listZonas;
 
-
     // Constructor
 
     public Recinto (String idRecinto, String nombre, String direccion, String ciudad){
-
         this.idRecinto = idRecinto;
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.listZonas = new ArrayList<>();
     }
-
 
     // Metodo para agregar zonas
 

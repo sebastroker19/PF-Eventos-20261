@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Vista historial de compras del usuario -->
+<VBox spacing="20" styleClass="main-content"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/css.css"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.ComprasController">
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Mis Compras" styleClass="page-title"/>
+            <Label text="Historial y estado de tus compras" styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="+ Nueva Compra" styleClass="btn-primary" onAction="#nuevaCompra"/>
+    </HBox>
+
+    <!-- Filtros rápidos de estado -->
+    <HBox styleClass="card" spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtrar por estado:" styleClass="label-field"/>
+        <Button text="Todas" styleClass="btn-secondary, btn-sm" onAction="#filtrarTodas"/>
+        <Button text="Creadas" styleClass="btn-secondary, btn-sm" onAction="#filtrarCreadas"/>
+        <Button text="Pagadas" styleClass="btn-success, btn-sm" onAction="#filtrarPagadas"/>
+        <Button text="Confirmadas" styleClass="btn-primary, btn-sm" onAction="#filtrarConfirmadas"/>
+        <Button text="Canceladas" styleClass="btn-danger, btn-sm" onAction="#filtrarCanceladas"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="cmbFiltroEvento" promptText="Por evento..."
+                  styleClass="combo-field" prefWidth="180"/>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+        <!-- Tabla de compras -->
+        <VBox styleClass="card" spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" style="-fx-padding: 16 20 12 20;">
+                <Label text="Historial de Compras" styleClass="section-title"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblConteoCompras" text="0 compras" styleClass="page-subtitle"/>
+            </HBox>
+            <Pane styleClass="separator-h"/>
+
+            <TableView fx:id="tablaCompras" VBox.vgrow="ALWAYS"
+                       styleClass="table-view" prefHeight="380">
+                <columns>
+                    <TableColumn fx:id="colCompraId" text="ID Compra" prefWidth="100"/>
+                    <TableColumn fx:id="colCompraEvento" text="Evento" prefWidth="160"/>
+                    <TableColumn fx:id="colCompraFecha" text="Fecha" prefWidth="100"/>
+                    <TableColumn fx:id="colCompraEntradas" text="Entradas" prefWidth="80"/>
+                    <TableColumn fx:id="colCompraTotal" text="Total" prefWidth="90"/>
+                    <TableColumn fx:id="colCompraEstado" text="Estado" prefWidth="110"/>
+                </columns>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="🧾" style="-fx-font-size:36px;"/>
+                        <Label text="No tienes compras registradas" styleClass="section-title"/>
+                        <Label text="Explora los eventos disponibles para comprar entradas"
+                               styleClass="page-subtitle"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <HBox spacing="8" style="-fx-padding: 12 20 16 20;" alignment="CENTER_RIGHT">
+                <Button text="💳 Pagar" styleClass="btn-success, btn-sm"
+                        fx:id="btnPagar" onAction="#pagarCompra" disable="true"/>
+                <Button text="❌ Cancelar compra" styleClass="btn-danger, btn-sm"
+                        fx:id="btnCancelarCompra" onAction="#cancelarCompra" disable="true"/>
+            </HBox>
+        </VBox>
+
+        <!-- Panel derecho: detalle de compra -->
+        <VBox styleClass="card" spacing="16" prefWidth="280" minWidth="260">
+            <Label text="Detalle de Compra" styleClass="section-title"/>
+            <Pane styleClass="separator-h"/>
+
+            <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="ID:" styleClass="label-field" prefWidth="90"/>
+                    <Label fx:id="lblDetalleId" text="—"
+                           style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Evento:" styleClass="label-field" prefWidth="90"/>
+                    <Label fx:id="lblDetalleEvento" text="—"
+                           style="-fx-font-size:12px; -fx-text-fill:#334155;" wrapText="true"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Fecha:" styleClass="label-field" prefWidth="90"/>
+                    <Label fx:id="lblDetalleFecha" text="—"
+                           style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Estado:" styleClass="label-field" prefWidth="90"/>
+                    <Label fx:id="lblDetalleEstado" text="—" styleClass="badge, badge-slate"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Total:" styleClass="label-field" prefWidth="90"/>
+                    <Label fx:id="lblDetalleTotal" text="$0"
+                           style="-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#0f172a;"/>
+                </HBox>
+            </VBox>
+
+            <Pane styleClass="separator-h"/>
+            <Label text="Entradas" styleClass="section-title"/>
+
+            <ListView fx:id="listaEntradas" styleClass="list-view"
+                      VBox.vgrow="ALWAYS" prefHeight="200">
+                <placeholder>
+                    <Label text="Sin entradas" styleClass="page-subtitle"/>
+                </placeholder>
+            </ListView>
+
+            <Label fx:id="lblMensajeCompra" text="" wrapText="true"
+                   styleClass="alert-success" visible="false" managed="false"/>
+        </VBox>
+
+    </HBox>
+
+</VBox>

@@ -31,8 +31,7 @@ public class Compra {
         this.listIncidencias = new ArrayList<>();
     }
 
-    // Agrega una entrada a la compra y recalcula el total
-    // Solo funciona si la compra aun no fue pagada
+    // Metodo para agregar una entrada a la compra y recalcula el total
 
     public boolean agregarEntrada(Entrada entrada) {
         if (!puedeModificarse()) {
@@ -44,7 +43,7 @@ public class Compra {
         return true;
     }
 
-    // Suma el precio de todas las entradas y actualiza el campo total
+    // Metodo para sumar el precio de todas las entradas y actualiza el campo total
 
     public void calcularTotal() {
         double suma = 0;
@@ -54,7 +53,7 @@ public class Compra {
         this.total = suma;
     }
 
-    // Marca la compra como PAGADA y marca cada asiento como VENDIDO
+    // Metodo para marcar la compra como PAGADA y marca cada asiento como VENDIDO
 
     public boolean confirmarPago() {
         if (estadoCompra != EstadoCompra.CREADA) {
@@ -74,7 +73,7 @@ public class Compra {
         return true;
     }
 
-    // Cancela la compra y libera los asientos reservados
+    // Metodo para cancelar la compra y libera los asientos reservados
 
     public boolean cancelar() {
         if (estadoCompra == EstadoCompra.CANCELADA || estadoCompra == EstadoCompra.REEMBOLSADA) {
@@ -90,12 +89,11 @@ public class Compra {
         return true;
     }
 
-    // Retorna true si la compra esta en estado CREADA (unico estado modificable)
+    // Metodo para verificar si la compra esta creada
 
     public boolean puedeModificarse() {
         return estadoCompra == EstadoCompra.CREADA;
     }
-
 
     //Getters y Setters
 

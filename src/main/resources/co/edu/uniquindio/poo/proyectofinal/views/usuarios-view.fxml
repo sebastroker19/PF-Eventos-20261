@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Vista de gestión de usuarios (Admin) -->
+<VBox spacing="20" styleClass="main-content"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/css.css"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.UsuariosController">
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Gestión de Usuarios" styleClass="page-title"/>
+            <Label text="Administra los usuarios registrados en la plataforma"
+                   styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="+ Registrar Usuario" styleClass="btn-primary"
+                onAction="#abrirFormularioUsuario"/>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS" alignment="TOP_LEFT">
+
+        <!-- Panel izquierdo: tabla -->
+        <VBox styleClass="card" spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <!-- Búsqueda -->
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 16 20 12 20;">
+                <TextField fx:id="txtBuscarUsuario" promptText="🔍  Buscar por nombre o correo..."
+                           styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                <Button text="Buscar" styleClass="btn-primary, btn-sm" onAction="#buscarUsuario"/>
+            </HBox>
+            <Pane styleClass="separator-h"/>
+
+            <TableView fx:id="tablaUsuarios" VBox.vgrow="ALWAYS"
+                       styleClass="table-view" prefHeight="440">
+                <columns>
+                    <TableColumn fx:id="colUserId" text="ID" prefWidth="90"/>
+                    <TableColumn fx:id="colUserNombre" text="Nombre" prefWidth="160"/>
+                    <TableColumn fx:id="colUserCorreo" text="Correo" prefWidth="180"/>
+                    <TableColumn fx:id="colUserTelefono" text="Teléfono" prefWidth="120"/>
+                    <TableColumn fx:id="colUserCompras" text="Compras" prefWidth="80"/>
+                </columns>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="👥" style="-fx-font-size:36px;"/>
+                        <Label text="No hay usuarios registrados" styleClass="section-title"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Acciones -->
+            <HBox spacing="8" style="-fx-padding: 12 20 16 20;" alignment="CENTER_RIGHT">
+                <Button text="✏ Editar" styleClass="btn-secondary, btn-sm"
+                        fx:id="btnEditarUsuario" onAction="#editarUsuario" disable="true"/>
+                <Button text="🗑 Eliminar" styleClass="btn-danger, btn-sm"
+                        fx:id="btnEliminarUsuario" onAction="#eliminarUsuario" disable="true"/>
+                <Button text="🧾 Ver compras" styleClass="btn-primary, btn-sm"
+                        fx:id="btnVerCompras" onAction="#verComprasUsuario" disable="true"/>
+            </HBox>
+        </VBox>
+
+        <!-- Panel derecho: formulario -->
+        <VBox styleClass="card" spacing="16" prefWidth="300" minWidth="280">
+            <Label text="Datos del Usuario" styleClass="section-title"/>
+            <Pane styleClass="separator-h"/>
+
+            <VBox spacing="6">
+                <Label text="ID de Usuario" styleClass="label-field"/>
+                <TextField fx:id="txtUserId" promptText="USR-001"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Nombre Completo" styleClass="label-field"/>
+                <TextField fx:id="txtUserNombre" promptText="Carlos Pérez"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Correo Electrónico" styleClass="label-field"/>
+                <TextField fx:id="txtUserCorreo" promptText="correo@ejemplo.com"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Teléfono" styleClass="label-field"/>
+                <TextField fx:id="txtUserTelefono" promptText="+57 300 000 0000"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+            <Pane styleClass="separator-h"/>
+
+            <HBox spacing="8">
+                <Button text="Guardar" styleClass="btn-primary" HBox.hgrow="ALWAYS"
+                        onAction="#guardarUsuario" maxWidth="Infinity"/>
+                <Button text="Limpiar" styleClass="btn-secondary"
+                        onAction="#limpiarFormUsuario"/>
+            </HBox>
+
+            <Label fx:id="lblMensajeUsuario" text="" wrapText="true"
+                   styleClass="alert-success" visible="false" managed="false"/>
+        </VBox>
+
+    </HBox>
+
+</VBox>

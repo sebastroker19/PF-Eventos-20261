@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Vista de exploración de eventos para el usuario -->
+<VBox spacing="20" styleClass="main-content"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/css.css"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.EventosController">
+
+    <!-- Encabezado + búsqueda -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Explorar Eventos" styleClass="page-title"/>
+            <Label text="Encuentra conciertos, teatro y conferencias" styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="+ Nuevo Evento" styleClass="btn-primary"
+                onAction="#abrirFormularioEvento"/>
+    </HBox>
+
+    <!-- Barra de filtros -->
+    <HBox styleClass="card" spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="txtBuscar" promptText="🔍  Buscar por nombre o ciudad..."
+                   styleClass="search-field" HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="cmbCategoria" promptText="Categoría"
+                  styleClass="combo-field" prefWidth="140"/>
+        <ComboBox fx:id="cmbEstado" promptText="Estado"
+                  styleClass="combo-field" prefWidth="130"/>
+        <Button text="Filtrar" styleClass="btn-primary, btn-sm" onAction="#filtrarEventos"/>
+        <Button text="Limpiar" styleClass="btn-secondary, btn-sm" onAction="#limpiarFiltros"/>
+    </HBox>
+
+    <!-- Tabla de eventos -->
+    <VBox styleClass="card" spacing="0" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 16 20 12 20;">
+            <Label text="Lista de Eventos" styleClass="section-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblConteoEventos" text="0 eventos" styleClass="page-subtitle"/>
+        </HBox>
+        <Pane styleClass="separator-h"/>
+
+        <TableView fx:id="tablaEventos" VBox.vgrow="ALWAYS"
+                   styleClass="table-view" prefHeight="420">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
+                <TableColumn fx:id="colNombre" text="Nombre" prefWidth="200"/>
+                <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="120"/>
+                <TableColumn fx:id="colCiudad" text="Ciudad" prefWidth="110"/>
+                <TableColumn fx:id="colFecha" text="Fecha" prefWidth="100"/>
+                <TableColumn fx:id="colEstado" text="Estado" prefWidth="110"/>
+                <TableColumn fx:id="colAcciones" text="Acciones" prefWidth="160"/>
+            </columns>
+            <placeholder>
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="🗓" style="-fx-font-size:36px;"/>
+                    <Label text="No hay eventos disponibles" styleClass="section-title"/>
+                    <Label text="Crea el primer evento con el botón de arriba"
+                           styleClass="page-subtitle"/>
+                </VBox>
+            </placeholder>
+        </TableView>
+
+        <!-- Barra de acciones de fila -->
+        <HBox spacing="8" style="-fx-padding: 12 20 16 20;" alignment="CENTER_RIGHT">
+            <Button text="✅ Publicar" styleClass="btn-success, btn-sm"
+                    fx:id="btnPublicar" onAction="#publicarEvento" disable="true"/>
+            <Button text="⏸ Pausar" styleClass="btn-secondary, btn-sm"
+                    fx:id="btnPausar" onAction="#pausarEvento" disable="true"/>
+            <Button text="❌ Cancelar" styleClass="btn-danger, btn-sm"
+                    fx:id="btnCancelar" onAction="#cancelarEvento" disable="true"/>
+            <Button text="💺 Ver asientos" styleClass="btn-primary, btn-sm"
+                    fx:id="btnVerAsientos" onAction="#verAsientos" disable="true"/>
+        </HBox>
+    </VBox>
+
+    <!-- Mensaje de feedback -->
+    <Label fx:id="lblMensaje" text="" styleClass="alert-success"
+           visible="false" managed="false"/>
+
+</VBox>

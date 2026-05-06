@@ -44,11 +44,11 @@ public class Evento {
         this.politicaEvento = politicaEvento;
     }
 
-
     /**
      * Agrega una compra al evento solo si este se encuentra PUBLICADO.
      * Si el evento está en BORRADOR, PAUSADO o CANCELADO, la compra no se procesa.
      */
+
     public boolean agregarCompra(Compra compra) {
         if (compra == null) {
             System.out.println("Error: La compra no puede ser nula.");
@@ -126,10 +126,7 @@ public class Evento {
         return disponibilidad;
     }
 
-    /**
-     * metodos get y set
-     * @return
-     */
+    //Setters y getters
 
     public Evento getInstance() {
         return instance;

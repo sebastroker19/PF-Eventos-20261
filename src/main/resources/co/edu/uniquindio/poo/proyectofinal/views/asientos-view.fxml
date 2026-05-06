@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Vista del mapa de asientos por zona -->
+<VBox spacing="20" styleClass="main-content"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/css.css"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.AsientosController">
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Gestión de Asientos" styleClass="page-title"/>
+            <Label text="Visualiza y administra la disponibilidad por zona" styleClass="page-subtitle"/>
+        </VBox>
+        <ComboBox fx:id="cmbEventoAsientos" promptText="Seleccionar Evento..."
+                  styleClass="combo-field" prefWidth="220"/>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+        <!-- Panel izquierdo: zonas y leyenda -->
+        <VBox spacing="16" prefWidth="220" minWidth="200">
+
+            <!-- Zonas disponibles -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="Zonas" styleClass="section-title"/>
+                <Pane styleClass="separator-h"/>
+                <ListView fx:id="listaZonas" styleClass="list-view"
+                          prefHeight="200" onMouseClicked="#seleccionarZona"/>
+            </VBox>
+
+            <!-- Leyenda de colores -->
+            <VBox styleClass="card" spacing="10">
+                <Label text="Leyenda" styleClass="section-title"/>
+                <Pane styleClass="separator-h"/>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Pane styleClass="seat-available" prefWidth="24" prefHeight="24"/>
+                    <Label text="Disponible" style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Pane styleClass="seat-reserved" prefWidth="24" prefHeight="24"/>
+                    <Label text="Reservado" style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Pane styleClass="seat-sold" prefWidth="24" prefHeight="24"/>
+                    <Label text="Vendido" style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Pane styleClass="seat-blocked" prefWidth="24" prefHeight="24"/>
+                    <Label text="Bloqueado" style="-fx-font-size:12px; -fx-text-fill:#334155;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Stats de zona seleccionada -->
+            <VBox styleClass="card" spacing="10">
+                <Label text="Zona Seleccionada" styleClass="section-title"/>
+                <Pane styleClass="separator-h"/>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Capacidad:" styleClass="label-field"/>
+                    <Label fx:id="lblCapacidadZona" text="—"
+                           style="-fx-font-size:13px; -fx-text-fill:#0f172a;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Disponibles:" styleClass="label-field"/>
+                    <Label fx:id="lblDisponiblesZona" text="—"
+                           style="-fx-font-size:13px; -fx-text-fill:#059669; -fx-font-weight:bold;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Ocupación:" styleClass="label-field"/>
+                    <Label fx:id="lblOcupacionZona" text="—"
+                           style="-fx-font-size:13px; -fx-text-fill:#e11d48; -fx-font-weight:bold;"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+
+        <!-- Panel central: mapa de asientos -->
+        <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Mapa de Asientos" styleClass="section-title"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblZonaNombre" text="Selecciona una zona"
+                       styleClass="badge, badge-indigo"/>
+            </HBox>
+            <Pane styleClass="separator-h"/>
+
+            <!-- Escenario -->
+            <HBox alignment="CENTER">
+                <Label text="ESCENARIO"
+                       style="-fx-background-color:#e2e8f0; -fx-background-radius:6;
+                              -fx-padding:8 60 8 60; -fx-font-size:11px;
+                              -fx-font-weight:bold; -fx-text-fill:#64748b;"/>
+            </HBox>
+
+            <!-- Área del mapa (se llena dinámicamente desde el controlador) -->
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+                <FlowPane fx:id="mapaAsientos" hgap="6" vgap="6"
+                          style="-fx-padding:12; -fx-background-color:transparent;"
+                          alignment="CENTER"/>
+            </ScrollPane>
+
+            <!-- Acciones sobre asiento seleccionado -->
+            <Pane styleClass="separator-h"/>
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <Label fx:id="lblAsientoSeleccionado" text="Ningún asiento seleccionado"
+                       styleClass="page-subtitle" HBox.hgrow="ALWAYS"/>
+                <Button text="🔒 Bloquear" styleClass="btn-secondary, btn-sm"
+                        fx:id="btnBloquearAsiento" onAction="#bloquearAsiento" disable="true"/>
+                <Button text="🔓 Liberar" styleClass="btn-success, btn-sm"
+                        fx:id="btnLiberarAsiento" onAction="#liberarAsiento" disable="true"/>
+            </HBox>
+
+            <Label fx:id="lblMensajeAsiento" text="" styleClass="alert-success"
+                   visible="false" managed="false"/>
+        </VBox>
+
+    </HBox>
+
+</VBox>

@@ -18,7 +18,6 @@ public class Usuario {
 
     private List<Compra> listCompras;
 
-
     //Constructor Builder
 
     public Usuario(Builder builder){
@@ -31,7 +30,6 @@ public class Usuario {
         this.direccion = builder.direccion;
         this.listCompras = builder.listCompras;
     }
-
 
     // metodo para agregar una compra al historial del usuario
 
@@ -142,7 +140,7 @@ public class Usuario {
         this.listCompras = listCompras;
     }
 
-    //Clase Builder para implementar el patron
+    // Clase Builder para implementar el patron
 
     public static class Builder{
 
@@ -153,7 +151,6 @@ public class Usuario {
         private int edad;
         private String direccion;
         private List<Compra> listCompras = new ArrayList<>();
-
 
         // Metodos tipo Setter del builder
 

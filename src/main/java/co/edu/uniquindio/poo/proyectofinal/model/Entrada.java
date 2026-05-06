@@ -19,7 +19,6 @@ public class Entrada {
         this.asiento = asiento;
     }
 
-
     //metodo para anular asientos
 
     public boolean anular() {
