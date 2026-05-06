@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Vista de gestión de incidencias (Admin) -->
+<VBox spacing="20" styleClass="main-content"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/css.css"
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.IncidenciasController">
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Gestión de Incidencias" styleClass="page-title"/>
+            <Label text="Registra y consulta eventos anómalos del sistema" styleClass="page-subtitle"/>
+        </VBox>
+        <Button text="+ Registrar Incidencia" styleClass="btn-danger"
+                onAction="#abrirFormularioIncidencia"/>
+    </HBox>
+
+    <!-- Filtros -->
+    <HBox styleClass="card" spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="txtFiltroTipo" promptText="🔍  Filtrar por tipo..."
+                   styleClass="search-field" prefWidth="200"/>
+        <ComboBox fx:id="cmbFiltroEntidad" promptText="Entidad afectada"
+                  styleClass="combo-field" prefWidth="160"/>
+        <TextField fx:id="txtFechaDesde" promptText="Desde (YYYY-MM-DD)"
+                   styleClass="input-field" prefWidth="160"/>
+        <TextField fx:id="txtFechaHasta" promptText="Hasta (YYYY-MM-DD)"
+                   styleClass="input-field" prefWidth="160"/>
+        <Button text="Filtrar" styleClass="btn-primary, btn-sm" onAction="#filtrarIncidencias"/>
+        <Button text="Limpiar" styleClass="btn-secondary, btn-sm" onAction="#limpiarFiltros"/>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+        <!-- Tabla principal -->
+        <VBox styleClass="card" spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" style="-fx-padding: 16 20 12 20;">
+                <Label text="Incidencias Registradas" styleClass="section-title"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblConteoIncidencias" text="0 incidencias" styleClass="page-subtitle"/>
+            </HBox>
+            <Pane styleClass="separator-h"/>
+
+            <TableView fx:id="tablaIncidencias" VBox.vgrow="ALWAYS"
+                       styleClass="table-view" prefHeight="420">
+                <columns>
+                    <TableColumn fx:id="colIncId" text="ID" prefWidth="90"/>
+                    <TableColumn fx:id="colIncTipo" text="Tipo" prefWidth="130"/>
+                    <TableColumn fx:id="colIncDescripcion" text="Descripción" prefWidth="220"/>
+                    <TableColumn fx:id="colIncFecha" text="Fecha" prefWidth="110"/>
+                    <TableColumn fx:id="colIncEntidad" text="Entidad" prefWidth="110"/>
+                </columns>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="✅" style="-fx-font-size:36px;"/>
+                        <Label text="No hay incidencias registradas" styleClass="section-title"/>
+                        <Label text="El sistema opera con normalidad" styleClass="page-subtitle"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Panel derecho: formulario registro -->
+        <VBox styleClass="card" spacing="16" prefWidth="300" minWidth="280">
+            <Label text="Nueva Incidencia" styleClass="section-title"/>
+            <Pane styleClass="separator-h"/>
+
+            <VBox spacing="6">
+                <Label text="ID Incidencia" styleClass="label-field"/>
+                <TextField fx:id="txtIncId" promptText="INC-001" styleClass="input-field"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Tipo de Incidencia" styleClass="label-field"/>
+                <ComboBox fx:id="cmbTipoInc" styleClass="combo-field"
+                          promptText="Seleccionar tipo..." maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Entidad Afectada" styleClass="label-field"/>
+                <ComboBox fx:id="cmbEntidadInc" styleClass="combo-field"
+                          promptText="EVENTO / COMPRA / USUARIO" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Fecha (YYYY-MM-DD)" styleClass="label-field"/>
+                <TextField fx:id="txtFechaInc" promptText="2026-05-04"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Descripción" styleClass="label-field"/>
+                <TextArea fx:id="txtDescripcionInc" promptText="Describe lo ocurrido..."
+                          styleClass="input-field" prefHeight="100" wrapText="true"
+                          style="-fx-background-radius:8; -fx-border-radius:8;"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="ID Compra asociada (opcional)" styleClass="label-field"/>
+                <TextField fx:id="txtCompraAsociada" promptText="CMP-001"
+                           styleClass="input-field"/>
+            </VBox>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+            <Pane styleClass="separator-h"/>
+
+            <HBox spacing="8">
+                <Button text="Registrar" styleClass="btn-danger" HBox.hgrow="ALWAYS"
+                        onAction="#registrarIncidencia" maxWidth="Infinity"/>
+                <Button text="Limpiar" styleClass="btn-secondary"
+                        onAction="#limpiarFormulario"/>
+            </HBox>
+
+            <Label fx:id="lblMensajeInc" text="" wrapText="true"
+                   styleClass="alert-success" visible="false" managed="false"/>
+        </VBox>
+
+    </HBox>
+
+</VBox>
