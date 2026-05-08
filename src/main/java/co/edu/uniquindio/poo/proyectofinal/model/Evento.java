@@ -3,7 +3,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Evento {
+public class Evento implements Cloneable{
 
     // Atributos originales de Evento
 
@@ -42,6 +42,14 @@ public class Evento {
         this.categoriaEvento = categoriaEvento;
         this.estadoEvento = estadoEvento;
         this.politicaEvento = politicaEvento;
+    }
+
+
+
+    // Metodo para clonar de el Patron Prototype
+
+    public Evento clone() throws CloneNotSupportedException {
+        return (Evento) super.clone();
     }
 
     /**

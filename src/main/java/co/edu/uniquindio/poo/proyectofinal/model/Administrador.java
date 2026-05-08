@@ -2,7 +2,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 import java.util.List;
 
-public class Administrador implements Cloneable {
+public class Administrador  {
 
     //Atributos Propios de la clase
 
@@ -22,11 +22,7 @@ public class Administrador implements Cloneable {
 
     }
 
-    // Metodo para clonar de el Patron Prototype
 
-    public Administrador clone() throws CloneNotSupportedException {
-        return (Administrador) super.clone();
-    }
 
     // Metodo para buscar usuarios
 
