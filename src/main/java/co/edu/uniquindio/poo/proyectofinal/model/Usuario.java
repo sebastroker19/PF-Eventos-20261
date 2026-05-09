@@ -34,11 +34,9 @@ public class Usuario implements OperacionesUsuario,IObservadorUsuario{
         this.listCompras = builder.listCompras;
     }
 
-<<<<<<< HEAD
 
-=======
     // metodo para agregar una compra al historial del usuario
->>>>>>> origin/main
+
 
 
     //Getters y Setters
@@ -100,7 +98,7 @@ public class Usuario implements OperacionesUsuario,IObservadorUsuario{
         this.listCompras = listCompras;
     }
 
-<<<<<<< HEAD
+
     public String getClave() {
         return clave;
     }
@@ -152,9 +150,9 @@ public class Usuario implements OperacionesUsuario,IObservadorUsuario{
 
 
     //Clase Builder para implementar el patron
-=======
+
     // Clase Builder para implementar el patron
->>>>>>> origin/main
+
 
     public static class Builder{
 
@@ -167,13 +165,13 @@ public class Usuario implements OperacionesUsuario,IObservadorUsuario{
         private String direccion;
         private List<Compra> listCompras = new ArrayList<>();
 
-<<<<<<< HEAD
+
 
         // Metodos tipo Setter
 
-=======
+
         // Metodos tipo Setter del builder
->>>>>>> origin/main
+
 
         public Builder idUsuario(String idUsuario){
             this.idUsuario = idUsuario;
