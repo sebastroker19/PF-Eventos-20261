@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.MainController"
+            stylesheets="@../css/css.css"
+            prefWidth="1200" prefHeight="750">
+
+    <!-- ── SIDEBAR ────────────────────────────────────────── -->
+    <left>
+        <VBox styleClass="sidebar" spacing="0">
+
+            <!-- Logo -->
+            <Label text="🎟 EventOS" styleClass="sidebar-logo"/>
+            <Label text="Plataforma de eventos" styleClass="sidebar-logo-sub"/>
+
+            <Pane styleClass="sidebar-divider"/>
+
+            <!-- Sección Usuario -->
+            <Label text="USUARIO" styleClass="sidebar-section-label"/>
+
+            <Button fx:id="btnExplorarEventos" text="  🔍  Explorar Eventos"
+                    styleClass="nav-btn" onAction="#mostrarExplorarEventos"/>
+            <Button fx:id="btnMisCompras" text="  🧾  Mis Compras"
+                    styleClass="nav-btn" onAction="#mostrarMisCompras"/>
+            <Button fx:id="btnMiPerfil" text="  👤  Mi Perfil"
+                    styleClass="nav-btn" onAction="#mostrarMiPerfil"/>
+
+            <Pane styleClass="sidebar-divider" VBox.vgrow="NEVER"/>
+
+            <!-- Sección Admin -->
+            <Label text="ADMINISTRADOR" styleClass="sidebar-section-label"/>
+
+            <Button fx:id="btnDashboard" text="  📊  Dashboard"
+                    styleClass="nav-btn" onAction="#mostrarDashboard"/>
+            <Button fx:id="btnGestionEventos" text="  🗓  Gestión Eventos"
+                    styleClass="nav-btn" onAction="#mostrarGestionEventos"/>
+            <Button fx:id="btnGestionUsuarios" text="  👥  Gestión Usuarios"
+                    styleClass="nav-btn" onAction="#mostrarGestionUsuarios"/>
+            <Button fx:id="btnGestionAsientos" text="  💺  Gestión Asientos"
+                    styleClass="nav-btn" onAction="#mostrarGestionAsientos"/>
+            <Button fx:id="btnIncidencias" text="  ⚠  Incidencias"
+                    styleClass="nav-btn" onAction="#mostrarIncidencias"/>
+
+            <!-- Espaciador -->
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <Pane styleClass="sidebar-divider"/>
+            <Button text="  🚪  Cerrar Sesión"
+                    styleClass="nav-btn" onAction="#cerrarSesion"/>
+            <Pane minHeight="12"/>
+
+        </VBox>
+    </left>
+
+    <!-- ── CONTENIDO DINÁMICO ─────────────────────────────── -->
+    <center>
+        <VBox spacing="0">
+            <!-- Topbar -->
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+                <Label fx:id="topbarTitle" text="Dashboard" styleClass="topbar-title"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="topbarUser" text="Admin — SoluEmpresa" styleClass="topbar-user"/>
+                <Pane minWidth="16"/>
+            </HBox>
+
+            <!-- Panel de vistas intercambiables -->
+            <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS"
+                       styleClass="main-content"/>
+        </VBox>
+    </center>
+
+</BorderPane>

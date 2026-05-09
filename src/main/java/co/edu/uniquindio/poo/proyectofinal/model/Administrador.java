@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo.proyectofinal.model;
 
+import java.util.List;
+
 public class Administrador implements Cloneable {
 
     //Atributos Propios de la clase
@@ -26,9 +28,84 @@ public class Administrador implements Cloneable {
         return (Administrador) super.clone();
     }
 
+    // Metodo para buscar usuarios
+
+    public Usuario buscarUsuario(String idUsuario, List<Usuario> listUsuarios) {
+        for (Usuario u : listUsuarios) {
+            if (u.getIdUsuario().equals(idUsuario)) {
+                return u;
+            }
+        }
+        System.out.println("No se encontro un usuario con id: " + idUsuario);
+        return null;
+    }
+
+    // Metodo para eliminar usuarios
+
+    public boolean eliminarUsuario(String idUsuario, List<Usuario> listUsuarios) {
+        Usuario encontrado = buscarUsuario(idUsuario, listUsuarios);
+        if (encontrado == null) {
+            return false;
+        }
+        listUsuarios.remove(encontrado);
+        return true;
+    }
+
+    // Metodo para reasigna el asiento de una compra
+
+    public boolean reasignarAsiento(Compra compra, Asiento asientoNuevo) {
+        if (compra.getEstadoCompra() != EstadoCompra.PAGADA &&
+                compra.getEstadoCompra() != EstadoCompra.CONFIRMADA) {
+            System.out.println("Solo se puede reasignar en compras PAGADAS o CONFIRMADAS.");
+            return false;
+        }
+        if (!asientoNuevo.estaDisponible()) {
+            System.out.println("El asiento nuevo no esta disponible.");
+            return false;
+        }
+        // Busca la entrada que tiene el asiento a reemplazar y lo libera
+        for (Entrada e : compra.getListEntradas()) {
+            if (e.getAsiento() != null && !e.getAsiento().estaDisponible()) {
+                e.getAsiento().liberar();
+                asientoNuevo.reservar();
+                e.setAsiento(asientoNuevo);
+                return true;
+            }
+        }
+        System.out.println("No se encontro una entrada con asiento ocupado en la compra.");
+        return false;
+    }
+
+    // Metodo para registra una incidencia
+
+    public void registrarIncidenciaEnCompra(Compra compra, Incidencia incidencia) {
+        compra.getListIncidencias().add(incidencia);
+    }
+
+    // Metodo para cambia el estado de un asiento a BLOQUEADO manualmente.
+
+
+    public boolean bloquearAsiento(Asiento asiento) {
+        if (asiento.getEstadoAsiento() == EstadoAsiento.VENDIDO) {
+            System.out.println("No se puede bloquear un asiento VENDIDO.");
+            return false;
+        }
+        asiento.setEstadoAsiento(EstadoAsiento.BLOQUEADO);
+        return true;
+    }
+
+    // Metodo para libera un asiento BLOQUEADO
+
+    public boolean liberarAsientoBloqueado(Asiento asiento) {
+        if (asiento.getEstadoAsiento() != EstadoAsiento.BLOQUEADO) {
+            System.out.println("Solo se puede liberar un asiento que este BLOQUEADO.");
+            return false;
+        }
+        asiento.setEstadoAsiento(EstadoAsiento.DISPONIBLE);
+        return true;
+    }
 
     // Getters y Setters
-
 
     public String getIdAdministrador() {
         return idAdministrador;
@@ -61,7 +138,6 @@ public class Administrador implements Cloneable {
     public void setNumTelefono(String numTelefono) {
         this.numTelefono = numTelefono;
     }
-
 
     //Metodo toString
 

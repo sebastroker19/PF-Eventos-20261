@@ -21,7 +21,7 @@ public class Asiento {
         this.entrada = entrada;
     }
 
-    // Marca el asiento como RESERVADO, solo si esta DISPONIBLE
+    // Metodo para marcar el asiento como RESERVADO
 
     public boolean reservar() {
         if (estadoAsiento != EstadoAsiento.DISPONIBLE) {
@@ -32,7 +32,7 @@ public class Asiento {
         return true;
     }
 
-    // Libera el asiento volviendo a DISPONIBLE (al cancelar una compra)
+    // Metodo para liberar el asiento volviendo a DISPONIBLE
 
     public boolean liberar() {
         if (estadoAsiento == EstadoAsiento.VENDIDO) {
@@ -44,7 +44,7 @@ public class Asiento {
         return true;
     }
 
-    // Retorna true si el asiento esta DISPONIBLE
+    // Metodo para verificar si el asiento esta DISPONIBLE
 
     public boolean estaDisponible() {
         return estadoAsiento == EstadoAsiento.DISPONIBLE;

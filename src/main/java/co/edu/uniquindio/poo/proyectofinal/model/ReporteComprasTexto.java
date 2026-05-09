@@ -3,7 +3,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.List;
 
 public class ReporteComprasTexto extends ReporteComprasTemplate {
-
+// plantilla general utilizada para los reportes
     @Override
     protected String generarCabecera(Usuario usuario) {
         return "==========================================\n" +
