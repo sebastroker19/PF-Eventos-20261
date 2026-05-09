@@ -3,7 +3,9 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recinto {
+// implementamos interface componenteUbicacion para cumplir proceso del Patron Composite
+
+public class Recinto implements ComponenteUbicacion {
 
     //Atributos Propios de la Clase
 
@@ -53,14 +55,29 @@ public class Recinto {
         return null;
     }
 
-    // Metodo para sumar la capacidad de todas las zonas del recinto.
+    // Metodo para sumar la capacidad de todas las zonas del recinto con el patron composite
 
+    @Override
     public int getCapacidadTotal() {
         int total = 0;
-        for (Zona z : listZonas) {
-            total += z.getCantidad();
+
+        // El recinto no cuenta asientos, le pregunta a sus zonas
+
+        for (ComponenteUbicacion zona : listZonas) {
+            total += zona.getCapacidadTotal();
         }
         return total;
+    }
+    // metodos sobreescritos por el contrato y para el patron composite
+
+    @Override
+    public int getCantidadAsientosDisponibles() {
+        int totalDisponibles = 0;
+        // El recinto le pregunta a sus zonas cuántos tienen libres
+        for (ComponenteUbicacion zona : listZonas) {
+            totalDisponibles += zona.getCantidadAsientosDisponibles();
+        }
+        return totalDisponibles;
     }
 
     // Getters y Setters

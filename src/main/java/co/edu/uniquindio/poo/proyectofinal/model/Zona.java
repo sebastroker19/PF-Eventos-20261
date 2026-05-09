@@ -3,9 +3,12 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zona {
+// implementamos interface componenteUbicacion para cumplir proceso del Patron Composite
 
-    // Atributos Propios de la Clase
+
+public class Zona implements ComponenteUbicacion {
+
+// Atributos Propios de la Clase
 
     private String idZona;
     private String nombre;
@@ -64,6 +67,20 @@ public class Zona {
         }
         return (ocupados * 100.0) / cantidad;
     }
+
+
+    // sobreescribimos los metodos impuestos por contrato
+
+    @Override
+    public int getCapacidadTotal() {
+        return this.cantidad;
+    }
+
+    @Override
+    public int getCantidadAsientosDisponibles() {
+        return getAsientosDisponibles().size();
+    }
+
 
     // Metodo para verificar si hay asientos disponibles
 

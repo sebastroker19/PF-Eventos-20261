@@ -3,7 +3,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Usuario implements OperacionesUsuario{
+public class Usuario implements OperacionesUsuario,IObservadorUsuario{
 
     // Atributos Propios de la Clase
 
@@ -137,6 +137,15 @@ public class Usuario implements OperacionesUsuario{
     public List<Compra> consultarHistorialCompra() {
         return this.listCompras;
     }
+
+    @Override
+    public void recibirNotificacion(String mensaje) {
+        System.out.println("------------------------------------------------");
+        System.out.println("NUEVO MENSAJE PARA: " + this.getNombreCompleto() + " (" + this.getCorreo() + ")");
+        System.out.println("Alerta: " + mensaje);
+        System.out.println("------------------------------------------------");
+    }
+
 
     //Clase Builder para implementar el patron
 

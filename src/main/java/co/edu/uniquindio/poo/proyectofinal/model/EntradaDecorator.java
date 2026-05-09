@@ -4,22 +4,23 @@ public abstract class EntradaDecorator implements IEntrada {
 
     protected IEntrada entrada;
 
-    //Constructor de la clase
-
     public EntradaDecorator(IEntrada entrada){
         this.entrada = entrada;
     }
-
-    //Metodos sobreescritos de la clase Entrada
 
     @Override
     public double getPrecio(){
         return entrada.getPrecio();
     }
 
-
     @Override
     public String getDescripcion(){
         return entrada.getDescripcion();
+    }
+
+    // ¡ESTE METODO ES CLAVE AQUI TAMBIEN!
+    @Override
+    public Asiento getAsiento() {
+        return entrada.getAsiento();
     }
 }
