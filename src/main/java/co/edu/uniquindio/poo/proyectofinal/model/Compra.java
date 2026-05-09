@@ -31,12 +31,7 @@ public class Compra {
     }
 
     // Metodo para agregar una entrada a la compra y recalcula el total
-<<<<<<< HEAD
     public boolean agregarEntrada(IEntrada entrada) {
-=======
-
-    public boolean agregarEntrada(Entrada entrada) {
->>>>>>> origin/main
         if (!puedeModificarse()) {
             System.out.println("La compra no puede modificarse en estado: " + estadoCompra);
             return false;
@@ -47,10 +42,6 @@ public class Compra {
     }
 
     // Metodo para sumar el precio de todas las entradas y actualiza el campo total
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
     public void calcularTotal() {
         double suma = 0;
         for (IEntrada e : listEntradas) {
@@ -59,14 +50,8 @@ public class Compra {
         this.total = suma;
     }
 
-<<<<<<< HEAD
     // Metodo para confirmar pago usando el Patron Strategy
     public boolean confirmarPago(EstrategiaPago metodoPago) {
-=======
-    // Metodo para marcar la compra como PAGADA y marca cada asiento como VENDIDO
-
-    public boolean confirmarPago() {
->>>>>>> origin/main
         if (estadoCompra != EstadoCompra.CREADA) {
             System.out.println("Solo se puede pagar una compra en estado CREADA.");
             return false;
@@ -94,10 +79,6 @@ public class Compra {
     }
 
     // Metodo para cancelar la compra y libera los asientos reservados
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
     public boolean cancelar() {
         if (estadoCompra == EstadoCompra.CANCELADA || estadoCompra == EstadoCompra.REEMBOLSADA) {
             System.out.println("La compra ya esta cancelada o reembolsada.");
@@ -113,21 +94,13 @@ public class Compra {
     }
 
     // Metodo para verificar si la compra esta creada
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
     public boolean puedeModificarse() {
         return estadoCompra == EstadoCompra.CREADA;
     }
 
-<<<<<<< HEAD
     // ==========================================
-    // GETTERS Y SETTERS
+    // GETTERS Y SETTERS (¡Aquí están los que faltaban!)
     // ==========================================
-=======
-    //Getters y Setters
->>>>>>> origin/main
 
     public String getIdCompra() {
         return idCompra;

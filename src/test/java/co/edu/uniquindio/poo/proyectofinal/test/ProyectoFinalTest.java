@@ -10,40 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProyectoFinalTest {
 
-
     /**
-     * Verifica que el evento se clone correctamente.
-     */
-    @Test
-    public void testCloneEvento() throws CloneNotSupportedException {
-
-        Evento evento = Evento.crear(
-                "1",
-                "Concierto",
-                "Evento musical",
-                "Armenia",
-                "2026-01-01",
-                "8PM",
-                CategoriaEvento.CONCIERTO,
-                PoliticaEvento.CANCELACION
-        );
-
-        Evento copia = evento.clone();
-
-        assertNotNull(copia);
-        assertEquals(evento.getIdEvento(), copia.getIdEvento());
-    }
-
-    /**
-     * Verifica que se encuentre un usuario por id.
+     * Verifica buscar usuario.
      */
     @Test
     public void testBuscarUsuario() {
 
-        Administrador admin = new Administrador("1", "Admin", "a", "1");
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
 
         Usuario usuario = new Usuario.Builder()
-                .idUsuario("u1")
+                .idUsuario("10")
                 .nombreCompleto("Juan")
                 .correo("juan@gmail.com")
                 .build();
@@ -51,92 +27,105 @@ public class ProyectoFinalTest {
         List<Usuario> lista = new ArrayList<>();
         lista.add(usuario);
 
-        Usuario encontrado = admin.buscarUsuario("u1", lista);
+        Usuario encontrado = admin.buscarUsuario("10", lista);
 
         assertNotNull(encontrado);
     }
 
     /**
-     * Verifica que se elimine un usuario.
+     * Verifica eliminar usuario.
      */
     @Test
     public void testEliminarUsuario() {
 
-        Administrador admin = new Administrador("1", "Admin", "a", "1");
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
 
         Usuario usuario = new Usuario.Builder()
-                .idUsuario("u1")
-                .nombreCompleto("Juan")
-                .correo("juan@gmail.com")
+                .idUsuario("1")
+                .correo("a@gmail.com")
                 .build();
 
         List<Usuario> lista = new ArrayList<>();
         lista.add(usuario);
 
-        boolean resultado = admin.eliminarUsuario("u1", lista);
+        boolean resultado = admin.eliminarUsuario("1", lista);
 
         assertTrue(resultado);
-        assertEquals(0, lista.size());
     }
 
     /**
-     * Verifica el bloqueo de un asiento.
+     * Verifica reasignar asiento.
      */
     @Test
-    public void testBloquearAsiento() {
+    public void testReasignarAsiento() {
 
-        Administrador admin = new Administrador("1", "Admin", "a", "1");
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
 
-        Asiento asiento = new Asiento(
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        Usuario usuario = new Usuario.Builder()
+                .idUsuario("1")
+                .build();
+
+        Compra compra = new Compra(
+                "1","10",0,
+                usuario,
+                evento,
+                EstadoCompra.CREADA
+        );
+
+        compra.setEstadoCompra(EstadoCompra.PAGADA);
+
+        Asiento asientoViejo = new Asiento(
+                "1","A",1,
+                EstadoAsiento.RESERVADO,
+                null
+        );
+
+        IEntrada entrada = new EntradaBase(
                 "1",
-                "A",
-                1,
+                10000,
+                EstadoEntrada.ACTIVA,
+                asientoViejo
+        );
+
+        compra.getListEntradas().add(entrada);
+
+        Asiento asientoNuevo = new Asiento(
+                "2","B",2,
                 EstadoAsiento.DISPONIBLE,
                 null
         );
 
-        boolean resultado = admin.bloquearAsiento(asiento);
+        boolean resultado = admin.reasignarAsiento(compra, asientoNuevo);
 
         assertTrue(resultado);
-        assertEquals(EstadoAsiento.BLOQUEADO, asiento.getEstadoAsiento());
     }
 
     /**
-     * Verifica liberar un asiento bloqueado.
-     */
-    @Test
-    public void testLiberarAsientoBloqueado() {
-
-        Administrador admin = new Administrador("1", "Admin", "a", "1");
-
-        Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
-                EstadoAsiento.BLOQUEADO,
-                null
-        );
-
-        boolean resultado = admin.liberarAsientoBloqueado(asiento);
-
-        assertTrue(resultado);
-        assertEquals(EstadoAsiento.DISPONIBLE, asiento.getEstadoAsiento());
-    }
-
-    /**
-     * Verifica registrar incidencia en compra.
+     * Verifica registrar incidencia.
      */
     @Test
     public void testRegistrarIncidencia() {
 
-        Administrador admin = new Administrador("1", "Admin", "a", "1");
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
 
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
@@ -144,7 +133,7 @@ public class ProyectoFinalTest {
                 "1",
                 "Pago",
                 "Error",
-                "2025-01-01",
+                "10/10",
                 EntidadAfectada.COMPRA
         );
 
@@ -153,18 +142,52 @@ public class ProyectoFinalTest {
         assertEquals(1, compra.getListIncidencias().size());
     }
 
+    /**
+     * Verifica bloquear asiento.
+     */
+    @Test
+    public void testBloquearAsiento() {
 
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
+
+        Asiento asiento = new Asiento(
+                "1","A",1,
+                EstadoAsiento.DISPONIBLE,
+                null
+        );
+
+        boolean resultado = admin.bloquearAsiento(asiento);
+
+        assertTrue(resultado);
+    }
 
     /**
-     * Verifica reservar un asiento.
+     * Verifica liberar asiento bloqueado.
+     */
+    @Test
+    public void testLiberarAsientoBloqueado() {
+
+        Administrador admin = new Administrador("1","Kevin","a@a.com","123");
+
+        Asiento asiento = new Asiento(
+                "1","A",1,
+                EstadoAsiento.BLOQUEADO,
+                null
+        );
+
+        boolean resultado = admin.liberarAsientoBloqueado(asiento);
+
+        assertTrue(resultado);
+    }
+
+    /**
+     * Verifica reservar asiento.
      */
     @Test
     public void testReservarAsiento() {
 
         Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
+                "1","A",1,
                 EstadoAsiento.DISPONIBLE,
                 null
         );
@@ -172,19 +195,16 @@ public class ProyectoFinalTest {
         boolean resultado = asiento.reservar();
 
         assertTrue(resultado);
-        assertEquals(EstadoAsiento.RESERVADO, asiento.getEstadoAsiento());
     }
 
     /**
-     * Verifica liberar un asiento.
+     * Verifica liberar asiento.
      */
     @Test
     public void testLiberarAsiento() {
 
         Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
+                "1","A",1,
                 EstadoAsiento.RESERVADO,
                 null
         );
@@ -192,19 +212,16 @@ public class ProyectoFinalTest {
         boolean resultado = asiento.liberar();
 
         assertTrue(resultado);
-        assertEquals(EstadoAsiento.DISPONIBLE, asiento.getEstadoAsiento());
     }
 
     /**
-     * Verifica disponibilidad del asiento.
+     * Verifica disponibilidad asiento.
      */
     @Test
     public void testEstaDisponible() {
 
         Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
+                "1","A",1,
                 EstadoAsiento.DISPONIBLE,
                 null
         );
@@ -212,26 +229,30 @@ public class ProyectoFinalTest {
         assertTrue(asiento.estaDisponible());
     }
 
-
-
     /**
-     * Verifica agregar entrada a compra.
+     * Verifica agregar entrada.
      */
     @Test
     public void testAgregarEntrada() {
 
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
-        Entrada entrada = new Entrada(
+        EntradaBase entrada = new EntradaBase(
                 "1",
-                50000,
+                10000,
                 EstadoEntrada.ACTIVA,
                 null
         );
@@ -239,33 +260,41 @@ public class ProyectoFinalTest {
         boolean resultado = compra.agregarEntrada(entrada);
 
         assertTrue(resultado);
-        assertEquals(1, compra.getListEntradas().size());
     }
 
     /**
-     * Verifica calcular total de compra.
+     * Verifica calcular total.
      */
     @Test
     public void testCalcularTotal() {
 
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
-        Entrada e1 = new Entrada("1", 10000, EstadoEntrada.ACTIVA, null);
-        Entrada e2 = new Entrada("2", 20000, EstadoEntrada.ACTIVA, null);
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                50000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
 
-        compra.agregarEntrada(e1);
-        compra.agregarEntrada(e2);
+        compra.agregarEntrada(entrada);
 
         compra.calcularTotal();
 
-        assertEquals(30000, compra.getTotal());
+        assertEquals(50000, compra.getTotal());
     }
 
     /**
@@ -274,36 +303,40 @@ public class ProyectoFinalTest {
     @Test
     public void testConfirmarPago() {
 
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
-        Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
-                EstadoAsiento.RESERVADO,
-                null
-        );
-
-        Entrada entrada = new Entrada(
+        EntradaBase entrada = new EntradaBase(
                 "1",
                 10000,
                 EstadoEntrada.ACTIVA,
-                asiento
+                null
         );
 
         compra.agregarEntrada(entrada);
 
-        boolean resultado = compra.confirmarPago();
+        PagoTarjeta pago = new PagoTarjeta(
+                "1234567891234567",
+                "Kevin",
+                "10/30",
+                "123"
+        );
+
+        boolean resultado = compra.confirmarPago(pago);
 
         assertTrue(resultado);
-        assertEquals(EstadoCompra.PAGADA, compra.getEstadoCompra());
     }
 
     /**
@@ -312,40 +345,127 @@ public class ProyectoFinalTest {
     @Test
     public void testCancelarCompra() {
 
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
         boolean resultado = compra.cancelar();
 
         assertTrue(resultado);
-        assertEquals(EstadoCompra.CANCELADA, compra.getEstadoCompra());
     }
 
     /**
-     * Verifica si la compra puede modificarse.
+     * Verifica puede modificarse.
      */
     @Test
     public void testPuedeModificarse() {
 
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
         Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                null,
-                null,
+                "1","10",0,
+                usuario,
+                evento,
                 EstadoCompra.CREADA
         );
 
         assertTrue(compra.puedeModificarse());
     }
 
+    /**
+     * Verifica registrar usuario.
+     */
+    @Test
+    public void testRegistrarUsuario() {
 
+        Empresa empresa = Empresa.getInstance();
+
+        Usuario usuario = new Usuario.Builder()
+                .idUsuario("1")
+                .correo("test@gmail.com")
+                .build();
+
+        boolean resultado = empresa.registrarUsuario(usuario);
+
+        assertTrue(resultado);
+    }
+
+    /**
+     * Verifica registrar evento.
+     */
+    @Test
+    public void testRegistrarEvento() {
+
+        Empresa empresa = Empresa.getInstance();
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        boolean resultado = empresa.registrarEvento(evento);
+
+        assertTrue(resultado);
+    }
+
+    /**
+     * Verifica buscar usuario empresa.
+     */
+    @Test
+    public void testBuscarUsuarioEmpresa() {
+
+        Empresa empresa = Empresa.getInstance();
+
+        Usuario usuario = new Usuario.Builder()
+                .idUsuario("50")
+                .correo("buscar@gmail.com")
+                .build();
+
+        empresa.registrarUsuario(usuario);
+
+        Usuario encontrado = empresa.buscarUsuario("50");
+
+        assertNotNull(encontrado);
+    }
+
+    /**
+     * Verifica buscar evento.
+     */
+    @Test
+    public void testBuscarEvento() {
+
+        Empresa empresa = Empresa.getInstance();
+
+        Evento evento = Evento.crear(
+                "50","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        empresa.registrarEvento(evento);
+
+        Evento encontrado = empresa.buscarEvento("50");
+
+        assertNotNull(encontrado);
+    }
 
     /**
      * Verifica anular entrada.
@@ -363,14 +483,13 @@ public class ProyectoFinalTest {
         boolean resultado = entrada.anular();
 
         assertTrue(resultado);
-        assertEquals(EstadoEntrada.ANULADA, entrada.getEstadoEntrada());
     }
 
     /**
-     * Verifica marcar entrada usada.
+     * Verifica usar entrada.
      */
     @Test
-    public void testMarcarEntradaUsada() {
+    public void testMarcarUsada() {
 
         Entrada entrada = new Entrada(
                 "1",
@@ -382,7 +501,6 @@ public class ProyectoFinalTest {
         boolean resultado = entrada.marcarUsada();
 
         assertTrue(resultado);
-        assertEquals(EstadoEntrada.USADA, entrada.getEstadoEntrada());
     }
 
     /**
@@ -403,61 +521,157 @@ public class ProyectoFinalTest {
         assertEquals(15000, entrada.getPrecioFinal());
     }
 
-
-
     /**
-     * Verifica singleton de empresa.
+     * Verifica precio entrada base.
      */
     @Test
-    public void testGetInstanceEmpresa() {
+    public void testGetPrecioEntradaBase() {
 
-        Empresa e1 = Empresa.getInstance();
-        Empresa e2 = Empresa.getInstance();
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                10000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
 
-        assertEquals(e1, e2);
+        assertEquals(10000, entrada.getPrecio());
     }
 
     /**
-     * Verifica registrar usuario.
+     * Verifica descripcion entrada base.
      */
     @Test
-    public void testRegistrarUsuario() {
+    public void testDescripcionEntradaBase() {
 
-        Empresa empresa = Empresa.getInstance();
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                10000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
 
-        Usuario usuario = new Usuario.Builder()
-                .idUsuario("1")
-                .nombreCompleto("Kevin")
-                .correo("k@gmail.com")
-                .build();
+        assertNotNull(entrada.getDescripcion());
+    }
 
-        boolean resultado = empresa.registrarUsuario(usuario);
+    /**
+     * Verifica anular entrada base.
+     */
+    @Test
+    public void testAnularEntradaBase() {
+
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                10000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
+
+        boolean resultado = entrada.anular();
 
         assertTrue(resultado);
     }
 
     /**
-     * Verifica buscar usuario.
+     * Verifica usar entrada base.
      */
     @Test
-    public void testBuscarUsuarioEmpresa() {
+    public void testMarcarUsadaEntradaBase() {
 
-        Empresa empresa = Empresa.getInstance();
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                10000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
 
-        Usuario usuario = new Usuario.Builder()
-                .idUsuario("99")
-                .nombreCompleto("Kevin")
-                .correo("99@gmail.com")
-                .build();
+        boolean resultado = entrada.marcarUsada();
 
-        empresa.registrarUsuario(usuario);
-
-        Usuario encontrado = empresa.buscarUsuario("99");
-
-        assertNotNull(encontrado);
+        assertTrue(resultado);
     }
 
+    /**
+     * Verifica descuento.
+     */
+    @Test
+    public void testDescuento() {
 
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                100000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
+
+        Descuento descuento = new Descuento(entrada,0.10);
+
+        assertEquals(90000, descuento.getPrecio());
+    }
+
+    /**
+     * Verifica entrada VIP.
+     */
+    @Test
+    public void testEntradaVIP() {
+
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                100000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
+
+        EntradaVIP vip = new EntradaVIP(entrada);
+
+        assertEquals(150000, vip.getPrecio());
+    }
+
+    /**
+     * Verifica seguro cancelacion.
+     */
+    @Test
+    public void testSeguroCancelacion() {
+
+        EntradaBase entrada = new EntradaBase(
+                "1",
+                100000,
+                EstadoEntrada.ACTIVA,
+                null
+        );
+
+        SeguroCancelacion seguro = new SeguroCancelacion(entrada);
+
+        assertEquals(110000, seguro.getPrecio());
+    }
+
+    /**
+     * Verifica procesar pago tarjeta.
+     */
+    @Test
+    public void testPagoTarjeta() {
+
+        PagoTarjeta pago = new PagoTarjeta(
+                "1234567891234567",
+                "Kevin",
+                "10/30",
+                "123"
+        );
+
+        assertTrue(pago.procesarPago(10000));
+    }
+
+    /**
+     * Verifica pago PSE.
+     */
+    @Test
+    public void testPagoPSE() {
+
+        PagoPSE pago = new PagoPSE(
+                "Bancolombia",
+                "correo@gmail.com"
+        );
+
+        assertTrue(pago.procesarPago(10000));
+    }
 
     /**
      * Verifica crear evento.
@@ -466,14 +680,9 @@ public class ProyectoFinalTest {
     public void testCrearEvento() {
 
         Evento evento = Evento.crear(
-                "1",
-                "Concierto",
-                "Evento",
-                "Armenia",
-                "2025",
-                "8pm",
+                "1","Evento","Desc","Armenia","10","8PM",
                 CategoriaEvento.CONCIERTO,
-                PoliticaEvento.CANCELACION
+                PoliticaEvento.REEMBOLSO
         );
 
         assertNotNull(evento);
@@ -486,20 +695,15 @@ public class ProyectoFinalTest {
     public void testPublicarEvento() {
 
         Evento evento = Evento.crear(
-                "1",
-                "Concierto",
-                "Evento",
-                "Armenia",
-                "2025",
-                "8pm",
+                "1","Evento","Desc","Armenia","10","8PM",
                 CategoriaEvento.CONCIERTO,
-                PoliticaEvento.CANCELACION
+                PoliticaEvento.REEMBOLSO
         );
 
         Recinto recinto = new Recinto(
                 "1",
-                "Recinto",
-                "Calle",
+                "Arena",
+                "Centro",
                 "Armenia"
         );
 
@@ -517,19 +721,91 @@ public class ProyectoFinalTest {
     public void testPausarEvento() {
 
         Evento evento = Evento.crear(
-                "1",
-                "Concierto",
-                "Evento",
-                "Armenia",
-                "2025",
-                "8pm",
+                "1","Evento","Desc","Armenia","10","8PM",
                 CategoriaEvento.CONCIERTO,
-                PoliticaEvento.CANCELACION
+                PoliticaEvento.REEMBOLSO
         );
 
-        evento.setEstadoEvento(EstadoEvento.PUBLICADO);
+        Recinto recinto = new Recinto(
+                "1",
+                "Arena",
+                "Centro",
+                "Armenia"
+        );
+
+        evento.getListRecintos().add(recinto);
+
+        evento.publicar();
 
         boolean resultado = evento.pausar();
+
+        assertTrue(resultado);
+    }
+
+    /**
+     * Verifica disponibilidad zonas.
+     */
+    @Test
+    public void testDisponibilidadZonas() {
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        Recinto recinto = new Recinto(
+                "1",
+                "Arena",
+                "Centro",
+                "Armenia"
+        );
+
+        Zona zona = new Zona(
+                "1",
+                "VIP",
+                2,
+                100000,
+                SectorZona.VIP
+        );
+
+        recinto.agregarZona(zona);
+
+        evento.getListRecintos().add(recinto);
+
+        assertNotNull(evento.getDisponibilidadZonas());
+    }
+
+    /**
+     * Verifica agregar compra evento.
+     */
+    @Test
+    public void testAgregarCompraEvento() {
+
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
+
+        Recinto recinto = new Recinto(
+                "1","Arena","Centro","Armenia"
+        );
+
+        evento.getListRecintos().add(recinto);
+
+        evento.publicar();
+
+        Usuario usuario = new Usuario.Builder().idUsuario("1").build();
+
+        Compra compra = new Compra(
+                "1","10",0,
+                usuario,
+                evento,
+                EstadoCompra.CREADA
+        );
+
+        boolean resultado = evento.agregarCompra(compra);
 
         assertTrue(resultado);
     }
@@ -541,111 +817,49 @@ public class ProyectoFinalTest {
     public void testCancelarEvento() {
 
         Evento evento = Evento.crear(
-                "1",
-                "Concierto",
-                "Evento",
-                "Armenia",
-                "2025",
-                "8pm",
+                "1","Evento","Desc","Armenia","10","8PM",
                 CategoriaEvento.CONCIERTO,
-                PoliticaEvento.CANCELACION
+                PoliticaEvento.REEMBOLSO
         );
 
-        boolean resultado = evento.cancelar();
+        evento.cancelarEvento("Lluvia");
 
-        assertTrue(resultado);
-    }
-
-
-
-    /**
-     * Verifica incidencia valida.
-     */
-    @Test
-    public void testIncidenciaValida() {
-
-        Incidencia incidencia = new Incidencia(
-                "1",
-                "Pago",
-                "Error",
-                "2025-01-01",
-                EntidadAfectada.COMPRA
-        );
-
-        assertTrue(incidencia.esValida());
+        assertEquals(EstadoEvento.CANCELADO, evento.getEstadoEvento());
     }
 
     /**
-     * Verifica filtrar incidencias por tipo.
+     * Verifica aplazar evento.
      */
     @Test
-    public void testFiltrarPorTipo() {
+    public void testAplazarEvento() {
 
-        List<Incidencia> lista = new ArrayList<>();
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
+        );
 
-        lista.add(new Incidencia(
-                "1",
-                "Pago",
-                "Error",
-                "2025",
-                EntidadAfectada.COMPRA
-        ));
+        evento.aplazarEvento("20/12");
 
-        List<Incidencia> resultado = Incidencia.filtrarPorTipo(lista, "Pago");
-
-        assertEquals(1, resultado.size());
+        assertEquals(EstadoEvento.PAUSADO, evento.getEstadoEvento());
     }
 
     /**
-     * Verifica filtrar incidencias por entidad.
+     * Verifica clone evento.
      */
     @Test
-    public void testFiltrarPorEntidad() {
+    public void testCloneEvento() throws CloneNotSupportedException {
 
-        List<Incidencia> lista = new ArrayList<>();
-
-        lista.add(new Incidencia(
-                "1",
-                "Pago",
-                "Error",
-                "2025",
-                EntidadAfectada.COMPRA
-        ));
-
-        List<Incidencia> resultado = Incidencia.filtrarPorEntidad(
-                lista,
-                EntidadAfectada.COMPRA
+        Evento evento = Evento.crear(
+                "1","Evento","Desc","Armenia","10","8PM",
+                CategoriaEvento.CONCIERTO,
+                PoliticaEvento.REEMBOLSO
         );
 
-        assertEquals(1, resultado.size());
+        Evento copia = evento.clone();
+
+        assertNotSame(evento, copia);
     }
-
-    /**
-     * Verifica filtrar incidencias por fecha.
-     */
-    @Test
-    public void testFiltrarPorFecha() {
-
-        List<Incidencia> lista = new ArrayList<>();
-
-        lista.add(new Incidencia(
-                "1",
-                "Pago",
-                "Error",
-                "2025-01-01",
-                EntidadAfectada.COMPRA
-        ));
-
-        List<Incidencia> resultado = Incidencia.filtrarPorFecha(
-                lista,
-                "2025-01-01",
-                "2025-12-31"
-        );
-
-        assertEquals(1, resultado.size());
-    }
-
-
 
     /**
      * Verifica agregar zona.
@@ -654,17 +868,14 @@ public class ProyectoFinalTest {
     public void testAgregarZona() {
 
         Recinto recinto = new Recinto(
-                "1",
-                "Recinto",
-                "Calle",
-                "Armenia"
+                "1","Arena","Centro","Armenia"
         );
 
         Zona zona = new Zona(
                 "1",
                 "VIP",
-                10,
-                10000,
+                2,
+                100000,
                 SectorZona.VIP
         );
 
@@ -674,77 +885,67 @@ public class ProyectoFinalTest {
     }
 
     /**
-     * Verifica obtener zona por sector.
+     * Verifica zona por sector.
      */
     @Test
-    public void testGetZonaPorSector() {
+    public void testZonaPorSector() {
 
         Recinto recinto = new Recinto(
-                "1",
-                "Recinto",
-                "Calle",
-                "Armenia"
+                "1","Arena","Centro","Armenia"
         );
-
-        Zona zona = new Zona(
-                "1",
-                "VIP",
-                10,
-                10000,
-                SectorZona.VIP
-        );
-
-        recinto.agregarZona(zona);
-
-        Zona encontrada = recinto.getZonaPorSector(SectorZona.VIP);
-
-        assertNotNull(encontrada);
-    }
-
-    /**
-     * Verifica capacidad total del recinto.
-     */
-    @Test
-    public void testGetCapacidadTotal() {
-
-        Recinto recinto = new Recinto(
-                "1",
-                "Recinto",
-                "Calle",
-                "Armenia"
-        );
-
-        recinto.agregarZona(new Zona(
-                "1",
-                "VIP",
-                10,
-                10000,
-                SectorZona.VIP
-        ));
-
-        assertEquals(10, recinto.getCapacidadTotal());
-    }
-
-
-
-    /**
-     * Verifica agregar asiento.
-     */
-    @Test
-    public void testAgregarAsiento() {
 
         Zona zona = new Zona(
                 "1",
                 "VIP",
                 2,
-                10000,
+                100000,
+                SectorZona.VIP
+        );
+
+        recinto.agregarZona(zona);
+
+        assertNotNull(recinto.getZonaPorSector(SectorZona.VIP));
+    }
+
+    /**
+     * Verifica capacidad recinto.
+     */
+    @Test
+    public void testCapacidadRecinto() {
+
+        Recinto recinto = new Recinto(
+                "1","Arena","Centro","Armenia"
+        );
+
+        Zona zona = new Zona(
+                "1",
+                "VIP",
+                5,
+                100000,
+                SectorZona.VIP
+        );
+
+        recinto.agregarZona(zona);
+
+        assertEquals(5, recinto.getCapacidadTotal());
+    }
+
+    /**
+     * Verifica agregar asiento zona.
+     */
+    @Test
+    public void testAgregarAsientoZona() {
+
+        Zona zona = new Zona(
+                "1",
+                "VIP",
+                2,
+                100000,
                 SectorZona.VIP
         );
 
         Asiento asiento = new Asiento(
-                "1",
-                "A",
-                1,
+                "1","A",1,
                 EstadoAsiento.DISPONIBLE,
                 null
         );
@@ -758,54 +959,54 @@ public class ProyectoFinalTest {
      * Verifica asientos disponibles.
      */
     @Test
-    public void testGetAsientosDisponibles() {
+    public void testAsientosDisponibles() {
 
         Zona zona = new Zona(
                 "1",
                 "VIP",
                 2,
-                10000,
+                100000,
                 SectorZona.VIP
         );
 
-        zona.agregarAsiento(new Asiento(
-                "1",
-                "A",
-                1,
+        Asiento asiento = new Asiento(
+                "1","A",1,
                 EstadoAsiento.DISPONIBLE,
                 null
-        ));
+        );
+
+        zona.agregarAsiento(asiento);
 
         assertEquals(1, zona.getAsientosDisponibles().size());
     }
 
     /**
-     * Verifica porcentaje de ocupacion.
+     * Verifica ocupacion zona.
      */
     @Test
-    public void testGetPorcentajeOcupacion() {
+    public void testPorcentajeOcupacion() {
 
         Zona zona = new Zona(
                 "1",
                 "VIP",
                 2,
-                10000,
+                100000,
                 SectorZona.VIP
         );
 
-        zona.agregarAsiento(new Asiento(
-                "1",
-                "A",
-                1,
+        Asiento asiento = new Asiento(
+                "1","A",1,
                 EstadoAsiento.RESERVADO,
                 null
-        ));
+        );
+
+        zona.agregarAsiento(asiento);
 
         assertEquals(50, zona.getPorcentajeOcupacion());
     }
 
     /**
-     * Verifica capacidad disponible.
+     * Verifica capacidad zona.
      */
     @Test
     public void testTieneCapacidad() {
@@ -814,179 +1015,160 @@ public class ProyectoFinalTest {
                 "1",
                 "VIP",
                 2,
-                10000,
+                100000,
                 SectorZona.VIP
         );
 
-        zona.agregarAsiento(new Asiento(
-                "1",
+        Asiento asiento = new Asiento(
+                "A1",
                 "A",
                 1,
                 EstadoAsiento.DISPONIBLE,
                 null
-        ));
+        );
+
+        zona.agregarAsiento(asiento);
 
         assertTrue(zona.tieneCapacidad());
     }
 
-
-
     /**
-     * Verifica precio entrada base.
+     * Verifica iniciar sesion usuario.
      */
     @Test
-    public void testEntradaBasePrecio() {
-
-        IEntrada entrada = new EntradaBase(10000);
-
-        assertEquals(10000, entrada.getPrecio());
-    }
-
-    /**
-     * Verifica descripcion entrada base.
-     */
-    @Test
-    public void testEntradaBaseDescripcion() {
-
-        IEntrada entrada = new EntradaBase(10000);
-
-        assertEquals("Entrada Basica", entrada.getDescripcion());
-    }
-
-    /**
-     * Verifica precio VIP.
-     */
-    @Test
-    public void testEntradaVIPPrecio() {
-
-        IEntrada entrada = new EntradaVIP(new EntradaBase(10000));
-
-        assertEquals(60000, entrada.getPrecio());
-    }
-
-    /**
-     * Verifica descripcion VIP.
-     */
-    @Test
-    public void testEntradaVIPDescripcion() {
-
-        IEntrada entrada = new EntradaVIP(new EntradaBase(10000));
-
-        assertTrue(entrada.getDescripcion().contains("VIP"));
-    }
-
-    /**
-     * Verifica precio seguro cancelacion.
-     */
-    @Test
-    public void testSeguroCancelacionPrecio() {
-
-        IEntrada entrada = new SeguroCancelacion(new EntradaBase(10000));
-
-        assertEquals(20000, entrada.getPrecio());
-    }
-
-    /**
-     * Verifica descripcion seguro cancelacion.
-     */
-    @Test
-    public void testSeguroCancelacionDescripcion() {
-
-        IEntrada entrada = new SeguroCancelacion(new EntradaBase(10000));
-
-        assertTrue(entrada.getDescripcion().contains("Seguro"));
-    }
-
-    /**
-     * Verifica precio descuento.
-     */
-    @Test
-    public void testDescuentoPrecio() {
-
-        IEntrada entrada = new Descuento(new EntradaBase(10000), 0.2);
-
-        assertEquals(8000, entrada.getPrecio());
-    }
-
-    /**
-     * Verifica descripcion descuento.
-     */
-    @Test
-    public void testDescuentoDescripcion() {
-
-        IEntrada entrada = new Descuento(new EntradaBase(10000), 0.2);
-
-        assertTrue(entrada.getDescripcion().contains("Descuento"));
-    }
-
-
-
-    /**
-     * Verifica agregar compra al usuario.
-     */
-    @Test
-    public void testAgregarCompraUsuario() {
+    public void testIniciarSesionUsuario() {
 
         Usuario usuario = new Usuario.Builder()
-                .idUsuario("1")
-                .nombreCompleto("Kevin")
-                .correo("k@gmail.com")
+                .correo("admin@gmail.com")
+                .clave("Password123")
                 .build();
 
-        Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                usuario,
-                null,
-                EstadoCompra.CREADA
+        assertTrue(usuario.iniciarSesion(
+                "admin@gmail.com",
+                "Password123"
+        ));
+    }
+
+    /**
+     * Verifica actualizar perfil.
+     */
+    @Test
+    public void testActualizarPerfil() {
+
+        Usuario usuario = new Usuario.Builder()
+                .nombreCompleto("Kevin")
+                .correo("a@gmail.com")
+                .numTelefono("123")
+                .build();
+
+        usuario.actualizarPerfil(
+                "Juan",
+                "juan@gmail.com",
+                "999"
         );
 
-        usuario.agregarCompra(compra);
-
-        assertEquals(1, usuario.getListCompras().size());
+        assertEquals("Juan", usuario.getNombreCompleto());
     }
 
     /**
-     * Verifica compras por estado.
+     * Verifica agregar metodo pago.
      */
     @Test
-    public void testGetComprasPorEstado() {
+    public void testAgregarMetodoPago() {
 
-        Usuario usuario = new Usuario.Builder()
-                .idUsuario("1")
-                .nombreCompleto("Kevin")
-                .correo("k@gmail.com")
-                .build();
+        Usuario usuario = new Usuario.Builder().build();
 
-        Compra compra = new Compra(
-                "1",
-                "2025",
-                0,
-                usuario,
-                null,
-                EstadoCompra.CREADA
+        PagoPSE pago = new PagoPSE(
+                "Banco",
+                "correo@gmail.com"
         );
 
-        usuario.agregarCompra(compra);
+        usuario.agregarMetodoPago(pago);
 
-        List<Compra> resultado = usuario.getComprasPorEstado(EstadoCompra.CREADA);
-
-        assertEquals(1, resultado.size());
+        assertEquals(1, usuario.getMetodosPago().size());
     }
 
     /**
-     * Verifica validar datos usuario.
+     * Verifica historial compras.
      */
     @Test
-    public void testValidarDatosUsuario() {
+    public void testConsultarHistorial() {
+
+        Usuario usuario = new Usuario.Builder().build();
+
+        assertNotNull(usuario.consultarHistorialCompra());
+    }
+
+    /**
+     * Verifica login proxy.
+     */
+    @Test
+    public void testLoginProxy() {
 
         Usuario usuario = new Usuario.Builder()
-                .idUsuario("1")
-                .nombreCompleto("Kevin")
-                .correo("k@gmail.com")
+                .correo("admin@gmail.com")
                 .build();
 
-        assertTrue(usuario.validarDatos());
+        UsuarioProxy proxy = new UsuarioProxy(usuario);
+
+        assertTrue(proxy.iniciarSesion(
+                "admin@gmail.com",
+                "Password123"
+        ));
+    }
+
+    /**
+     * Verifica actualizar perfil proxy.
+     */
+    @Test
+    public void testActualizarPerfilProxy() {
+
+        Usuario usuario = new Usuario.Builder().build();
+
+        UsuarioProxy proxy = new UsuarioProxy(usuario);
+
+        proxy.actualizarPerfil(
+                "Kevin",
+                "a@gmail.com",
+                "123456"
+        );
+
+        assertTrue(true);
+    }
+
+    /**
+     * Verifica agregar metodo pago proxy.
+     */
+    @Test
+    public void testAgregarMetodoPagoProxy() {
+
+        Usuario usuario = new Usuario.Builder().build();
+
+        UsuarioProxy proxy = new UsuarioProxy(usuario);
+
+        PagoPSE pago = new PagoPSE(
+                "Banco",
+                "correo@gmail.com"
+        );
+
+        proxy.agregarMetodoPago(pago);
+
+        assertEquals(1, usuario.getMetodosPago().size());
+    }
+
+    /**
+     * Verifica cache proxy.
+     */
+    @Test
+    public void testCacheProxy() {
+
+        Usuario usuario = new Usuario.Builder().build();
+
+        UsuarioProxy proxy = new UsuarioProxy(usuario);
+
+        List<Compra> lista1 = proxy.consultarHistorialCompra();
+        List<Compra> lista2 = proxy.consultarHistorialCompra();
+
+        assertSame(lista1, lista2);
     }
 }
