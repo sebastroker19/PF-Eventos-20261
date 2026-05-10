@@ -6,5 +6,5 @@ public enum CategoriaEvento {
 
     CONCIERTO,
     TEATRO,
-    COFERENCIA
+    CONFERENCIA
 }
