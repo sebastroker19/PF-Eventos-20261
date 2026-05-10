@@ -127,13 +127,15 @@ public class ComprasController implements Initializable {
         lblDetalleTotal.setText(String.format("$%,.0f", compra.getTotal()));
 
         listaEntradas.getItems().clear();
-        for (Entrada entrada : compra.getListEntradas()) {
-            String texto = entrada.getIdEntrada()
-                    + " — $" + String.format("%,.0f", entrada.getPrecioFinal());
+        for (IEntrada entrada : compra.getListEntradas()) {
+            String texto = entrada.getDescripcion()
+                    + " — $" + String.format("%,.0f", entrada.getPrecio());
+
             if (entrada.getAsiento() != null) {
                 texto += " (Fila " + entrada.getAsiento().getFila()
                         + " #" + entrada.getAsiento().getNumero() + ")";
             }
+
             listaEntradas.getItems().add(texto);
         }
     }
@@ -152,7 +154,15 @@ public class ComprasController implements Initializable {
         Compra seleccionada = tablaCompras.getSelectionModel().getSelectedItem();
         if (seleccionada == null) return;
 
-        boolean exito = seleccionada.confirmarPago();
+        EstrategiaPago metodoPago = new PagoTarjeta(
+                "1234567891234567",
+                seleccionada.getUsuario() != null
+                        ? seleccionada.getUsuario().getNombreCompleto()
+                        : "Cliente",
+                "12/30",
+                "123");
+
+        boolean exito = seleccionada.confirmarPago(metodoPago);
 
         if (exito) {
             mostrarMensajeExito("Pago procesado correctamente. Estado: PAGADA.");

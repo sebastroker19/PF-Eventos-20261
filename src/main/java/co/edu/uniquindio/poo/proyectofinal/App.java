@@ -8,14 +8,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * Punto de entrada de la aplicación JavaFX.
- *
- * Responsabilidades:
- *   1. Inicializar datos de prueba en el Modelo (Empresa Singleton) — RF-045.
- *   2. Cargar main-view.fxml como escena raíz.
- *   3. Mostrar el Stage principal.
- */
 public class App extends Application {
 
     @Override
@@ -36,14 +28,6 @@ public class App extends Application {
         stage.show();
     }
 
-    /**
-     * Carga datos de prueba directamente en el Singleton Empresa.
-     * Esto satisface RF-045: "datos de prueba inicializados
-     * (usuarios, eventos, recintos, zonas, asientos, compras, pagos)".
-     *
-     * Se hace aquí (en Application.start) y no en Empresa para no
-     * mezclar datos de UI con la lógica de negocio del Modelo.
-     */
     private void inicializarDatosDePrueba() {
         Empresa empresa = Empresa.getInstance();
 
@@ -163,30 +147,36 @@ public class App extends Application {
         }
 
         // ── Compras de prueba ────────────────────────────────────────────────
-        if (concierto != null && !zonaVip.getListAsientos().isEmpty()) {
+        if (concierto != null && zonaVip.getListAsientos().size() > 1) {
             // Asiento VIP-1-2 para la compra de Carlos
             Asiento asientoVip = zonaVip.getListAsientos().get(1);
-                asientoVip.reservar();
+            asientoVip.reservar();
 
-                Entrada entradaVip = new Entrada(
-                        "ENT-01",
-                        zonaVip.getPrecioBase(),
-                        EstadoEntrada.ACTIVA,
-                        asientoVip);
+            IEntrada entradaVip = new EntradaBase(
+                    "ENT-01",
+                    zonaVip.getPrecioBase(),
+                    EstadoEntrada.ACTIVA,
+                    asientoVip);
 
-                Compra compra1 = new Compra(
-                        "CMP-01",
-                        "2026-05-10",
-                        entradaVip.getPrecioFinal(),
-                        u1,
-                        concierto,
-                        EstadoCompra.CREADA);
+            Compra compra1 = new Compra(
+                    "CMP-01",
+                    "2026-05-10",
+                    entradaVip.getPrecio(),
+                    u1,
+                    concierto,
+                    EstadoCompra.CREADA);
 
-                compra1.getListEntradas().add(entradaVip);
-                compra1.calcularTotal();
-                compra1.confirmarPago();
+            compra1.agregarEntrada(entradaVip);
 
-                u1.getListCompras().add(compra1);
+            EstrategiaPago pagoPrueba = new PagoTarjeta(
+                    "1234567891234567",
+                    "Carlos Pérez García",
+                    "12/30",
+                    "123");
+
+            compra1.confirmarPago(pagoPrueba);
+
+            u1.getListCompras().add(compra1);
         }
 
         System.out.println("✅ Datos de prueba inicializados correctamente.");
