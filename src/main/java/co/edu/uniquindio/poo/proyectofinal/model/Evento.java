@@ -3,7 +3,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Evento {
+public class Evento implements Cloneable{
 
     // Atributos originales de Evento
 
@@ -24,6 +24,8 @@ public class Evento {
     private CategoriaEvento categoriaEvento;
     private EstadoEvento estadoEvento;
     private PoliticaEvento politicaEvento;
+    //agregamos la lista de los suscriptores a la clase evento
+    private List<IObservadorUsuario> suscriptores;
 
     // Constructor de la clase evento
 
@@ -42,6 +44,16 @@ public class Evento {
         this.categoriaEvento = categoriaEvento;
         this.estadoEvento = estadoEvento;
         this.politicaEvento = politicaEvento;
+        //inicializamos la lista vacia de suscriptores
+        this.suscriptores = new ArrayList<>();
+    }
+
+
+
+    // Metodo para clonar de el Patron Prototype
+
+    public Evento clone() throws CloneNotSupportedException {
+        return (Evento) super.clone();
     }
 
     /**
@@ -97,18 +109,6 @@ public class Evento {
         return true;
     }
 
-    //Metodo para cancelar evento
-
-    public boolean cancelar() {
-        if (estadoEvento == EstadoEvento.CANCELADO || estadoEvento == EstadoEvento.FINALIZADO) {
-            return false;
-        }
-        estadoEvento = EstadoEvento.CANCELADO;
-        for (Compra c : listCompras) {
-            c.cancelar(); // Lógica de cancelación en cascada[cite: 2]
-        }
-        return true;
-    }
 
     //Metodo para ver disponiblidad por zonas
 
@@ -125,6 +125,52 @@ public class Evento {
         }
         return disponibilidad;
     }
+    // metodo del patron observer
+    //aqui es como tener el boton que da permisos Para recibir notificaciones
+
+    public void agregarSuscriptor(IObservadorUsuario usuario) {
+        if (!suscriptores.contains(usuario))
+            suscriptores.add(usuario);
+    }
+
+    // accion de anular la suscripcion
+    public void eliminarSuscriptor(IObservadorUsuario usuario){
+        suscriptores.remove(usuario);
+    }
+    // este es el sistema automatico para enviar las notificaciones automaticamente
+
+    public void notificarSuscriptores(String mensajeExtra) {
+        String mensajeCompleto = "El evento: " + this.nombre + " ha cambiado su estado a: " + this.estadoEvento + ". " + mensajeExtra;
+        for (IObservadorUsuario suscriptor : suscriptores) {
+            suscriptor.recibirNotificacion(mensajeCompleto);
+        }
+    }
+    // notificaciones de la logica de negocio por si algo sale mal se cancela evento o se aplaza
+
+    public void cancelarEvento(String motivo){
+        // CORREGIDO: Aquí reutilizamos tu lógica de cancelación en cascada que ya habías hecho
+        if (this.estadoEvento == EstadoEvento.CANCELADO || this.estadoEvento == EstadoEvento.FINALIZADO) {
+            System.out.println("El evento ya estaba cancelado o finalizado.");
+            return;
+        }
+
+        this.estadoEvento = EstadoEvento.CANCELADO;
+
+        for (Compra c : listCompras) {
+            c.cancelar(); // Lógica de cancelación en cascada
+        }
+
+        System.out.println("ATENCIÓN: El evento " + this.nombre + " ha sido cancelado.");
+        notificarSuscriptores("Motivo: " + motivo + ". Se iniciará el proceso de reembolso.");
+    }
+    public void aplazarEvento(String nuevaFecha) {
+        this.estadoEvento = EstadoEvento.PAUSADO;
+        this.fecha = nuevaFecha;
+        System.out.println("⚠️ ATENCIÓN: El evento " + this.nombre + " cambió de fecha.");
+
+        notificarSuscriptores("La nueva fecha del evento será: " + nuevaFecha + ". Tus entradas siguen siendo válidas.");
+    }
+
 
     //Setters y getters
 

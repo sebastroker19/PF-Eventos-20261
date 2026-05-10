@@ -6,34 +6,32 @@ import java.util.List;
 public class Compra {
 
     //Atributos Propios de la Clase
-
     private String idCompra;
     private String fechaCreacion;
     private double total;
     private Usuario usuario;
     private Evento evento;
     private EstadoCompra estadoCompra;
-    private List<Entrada> listEntradas;
+    private List<IEntrada> listEntradas;
     private List<Incidencia> listIncidencias;
 
-
     //Constructor de la Clase
-
     public Compra(String idCompra, String fechaCreacion, double total, Usuario usuario, Evento evento, EstadoCompra estadoCompra) {
         this.idCompra = idCompra;
         this.fechaCreacion = fechaCreacion;
         this.usuario = usuario;
         this.evento = evento;
-        this.estadoCompra = estadoCompra;
+
+        // Limpiamos los estados por defecto
         this.total = 0;
         this.estadoCompra = EstadoCompra.CREADA;
+
         this.listEntradas = new ArrayList<>();
         this.listIncidencias = new ArrayList<>();
     }
 
     // Metodo para agregar una entrada a la compra y recalcula el total
-
-    public boolean agregarEntrada(Entrada entrada) {
+    public boolean agregarEntrada(IEntrada entrada) {
         if (!puedeModificarse()) {
             System.out.println("La compra no puede modificarse en estado: " + estadoCompra);
             return false;
@@ -44,18 +42,16 @@ public class Compra {
     }
 
     // Metodo para sumar el precio de todas las entradas y actualiza el campo total
-
     public void calcularTotal() {
         double suma = 0;
-        for (Entrada e : listEntradas) {
-            suma += e.getPrecioFinal();
+        for (IEntrada e : listEntradas) {
+            suma += e.getPrecio();
         }
         this.total = suma;
     }
 
-    // Metodo para marcar la compra como PAGADA y marca cada asiento como VENDIDO
-
-    public boolean confirmarPago() {
+    // Metodo para confirmar pago usando el Patron Strategy
+    public boolean confirmarPago(EstrategiaPago metodoPago) {
         if (estadoCompra != EstadoCompra.CREADA) {
             System.out.println("Solo se puede pagar una compra en estado CREADA.");
             return false;
@@ -64,24 +60,32 @@ public class Compra {
             System.out.println("La compra no tiene entradas.");
             return false;
         }
-        estadoCompra = EstadoCompra.PAGADA;
-        for (Entrada e : listEntradas) {
-            if (e.getAsiento() != null) {
-                e.getAsiento().setEstadoAsiento(EstadoAsiento.VENDIDO);
+
+        // STRATEGY: Procesamos el pago antes de entregar los asientos
+        boolean pagoExitoso = metodoPago.procesarPago(this.total);
+
+        if (pagoExitoso) {
+            estadoCompra = EstadoCompra.PAGADA;
+            for (IEntrada e : listEntradas) {
+                if (e.getAsiento() != null) {
+                    e.getAsiento().setEstadoAsiento(EstadoAsiento.VENDIDO);
+                }
             }
+            return true;
+        } else {
+            System.out.println("El pago fue rechazado por el banco/sistema.");
+            return false;
         }
-        return true;
     }
 
     // Metodo para cancelar la compra y libera los asientos reservados
-
     public boolean cancelar() {
         if (estadoCompra == EstadoCompra.CANCELADA || estadoCompra == EstadoCompra.REEMBOLSADA) {
             System.out.println("La compra ya esta cancelada o reembolsada.");
             return false;
         }
         estadoCompra = EstadoCompra.CANCELADA;
-        for (Entrada e : listEntradas) {
+        for (IEntrada e : listEntradas) {
             if (e.getAsiento() != null) {
                 e.getAsiento().liberar();
             }
@@ -90,12 +94,13 @@ public class Compra {
     }
 
     // Metodo para verificar si la compra esta creada
-
     public boolean puedeModificarse() {
         return estadoCompra == EstadoCompra.CREADA;
     }
 
-    //Getters y Setters
+    // ==========================================
+    // GETTERS Y SETTERS (¡Aquí están los que faltaban!)
+    // ==========================================
 
     public String getIdCompra() {
         return idCompra;
@@ -115,6 +120,10 @@ public class Compra {
 
     public double getTotal() {
         return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     public Usuario getUsuario() {
@@ -141,8 +150,12 @@ public class Compra {
         this.estadoCompra = estadoCompra;
     }
 
-    public List<Entrada> getListEntradas() {
+    public List<IEntrada> getListEntradas() {
         return listEntradas;
+    }
+
+    public void setListEntradas(List<IEntrada> listEntradas) {
+        this.listEntradas = listEntradas;
     }
 
     public List<Incidencia> getListIncidencias() {
@@ -153,9 +166,7 @@ public class Compra {
         this.listIncidencias = listIncidencias;
     }
 
-
-    //Metodo toString
-
+    // Metodo toString
     @Override
     public String toString() {
         return "Compra{" +

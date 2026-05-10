@@ -2,7 +2,7 @@ package co.edu.uniquindio.poo.proyectofinal.model;
 
 import java.util.List;
 
-public class Administrador implements Cloneable {
+public class Administrador  {
 
     //Atributos Propios de la clase
 
@@ -22,11 +22,7 @@ public class Administrador implements Cloneable {
 
     }
 
-    // Metodo para clonar de el Patron Prototype
 
-    public Administrador clone() throws CloneNotSupportedException {
-        return (Administrador) super.clone();
-    }
 
     // Metodo para buscar usuarios
 
@@ -54,24 +50,36 @@ public class Administrador implements Cloneable {
     // Metodo para reasigna el asiento de una compra
 
     public boolean reasignarAsiento(Compra compra, Asiento asientoNuevo) {
+
         if (compra.getEstadoCompra() != EstadoCompra.PAGADA &&
                 compra.getEstadoCompra() != EstadoCompra.CONFIRMADA) {
+
             System.out.println("Solo se puede reasignar en compras PAGADAS o CONFIRMADAS.");
             return false;
         }
+
         if (!asientoNuevo.estaDisponible()) {
             System.out.println("El asiento nuevo no esta disponible.");
             return false;
         }
+
         // Busca la entrada que tiene el asiento a reemplazar y lo libera
-        for (Entrada e : compra.getListEntradas()) {
-            if (e.getAsiento() != null && !e.getAsiento().estaDisponible()) {
+
+        for (IEntrada e : compra.getListEntradas()) {
+
+            if (e.getAsiento() != null &&
+                    !e.getAsiento().estaDisponible()) {
+
                 e.getAsiento().liberar();
+
                 asientoNuevo.reservar();
-                e.setAsiento(asientoNuevo);
+
+                e.getAsiento().setEstadoAsiento(EstadoAsiento.DISPONIBLE);
+
                 return true;
             }
         }
+
         System.out.println("No se encontro una entrada con asiento ocupado en la compra.");
         return false;
     }
