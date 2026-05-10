@@ -127,9 +127,9 @@ public class ComprasController implements Initializable {
         lblDetalleTotal.setText(String.format("$%,.0f", compra.getTotal()));
 
         listaEntradas.getItems().clear();
-        for (IEntrada entrada : compra.getListEntradas()) {
-            String texto = entrada.getDescripcion()
-                    + " — $" + String.format("%,.0f", entrada.getPrecio());
+        for (Entrada entrada : compra.getListEntradas()) {
+            String texto = entrada.getIdEntrada()
+                    + " — $" + String.format("%,.0f", entrada.getPrecioFinal());
             if (entrada.getAsiento() != null) {
                 texto += " (Fila " + entrada.getAsiento().getFila()
                         + " #" + entrada.getAsiento().getNumero() + ")";
@@ -152,39 +152,16 @@ public class ComprasController implements Initializable {
         Compra seleccionada = tablaCompras.getSelectionModel().getSelectedItem();
         if (seleccionada == null) return;
 
-        // Diálogo de selección de método de pago (Strategy pattern del Modelo)
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(
-                "Tarjeta de crédito",
-                "Tarjeta de crédito", "PSE");
-        dialog.setTitle("Método de pago");
-        dialog.setHeaderText("Total a pagar: $"
-                + String.format("%,.0f", seleccionada.getTotal()));
-        dialog.setContentText("Selecciona el método de pago:");
+        boolean exito = seleccionada.confirmarPago();
 
-        dialog.showAndWait().ifPresent(metodo -> {
-            EstrategiaPago estrategia;
-
-            // El controller solo decide QUÉ estrategia instanciar;
-            // la lógica de procesamiento es del Modelo.
-            if ("Tarjeta de crédito".equals(metodo)) {
-                estrategia = new PagoTarjeta(
-                        "4000000000000000", "Usuario", "12/28", "000");
-            } else {
-                estrategia = new PagoPSE("Bancolombia", "pago@eventOS.com");
-            }
-
-            // Delega al Modelo
-            boolean exito = seleccionada.confirmarPago(estrategia);
-
-            if (exito) {
-                mostrarMensajeExito("Pago procesado correctamente. Estado: PAGADA.");
-                tablaCompras.refresh();
-                mostrarDetalle(seleccionada);
-                btnPagar.setDisable(true);
-            } else {
-                mostrarMensajeError("El pago fue rechazado. Verifica que la compra tenga entradas.");
-            }
-        });
+        if (exito) {
+            mostrarMensajeExito("Pago procesado correctamente. Estado: PAGADA.");
+            tablaCompras.refresh();
+            mostrarDetalle(seleccionada);
+            btnPagar.setDisable(true);
+        } else {
+            mostrarMensajeError("No se pudo pagar. Verifica que la compra esté creada y tenga entradas.");
+        }
     }
 
     /**

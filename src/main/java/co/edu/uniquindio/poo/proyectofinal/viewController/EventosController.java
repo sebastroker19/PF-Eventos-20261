@@ -214,8 +214,8 @@ public class EventosController implements Initializable {
 
         confirm.showAndWait().ifPresent(respuesta -> {
             if (respuesta == ButtonType.OK) {
-                evento.cancelarEvento("Cancelado desde la administración.");
-                mostrarMensajeExito("Evento cancelado. Se notificó a los suscriptores.");
+                evento.cancelar();
+                mostrarMensajeExito("Evento cancelado correctamente.");
                 tablaEventos.refresh();
                 configurarBotonesParaSeleccion(evento);
             }

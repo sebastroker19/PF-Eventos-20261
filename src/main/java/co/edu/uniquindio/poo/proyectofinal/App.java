@@ -7,8 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Punto de entrada de la aplicación JavaFX.
@@ -133,17 +131,17 @@ public class App extends Application {
         Evento concierto = Evento.crear(
                 "EVT-01", "Concierto Juanes", "Gran concierto en vivo",
                 "Bogotá", "2026-08-15", "20:00",
-                CategoriaEvento.CONCIERTO, PoliticaEvento.NO_REEMBOLSABLE);
+                CategoriaEvento.CONCIERTO, PoliticaEvento.REEMBOLSO);
 
-        Evento obra = Evento.crear(
-                "EVT-02", "Hamlet — Teatro Mayor", "Obra clásica de Shakespeare",
-                "Bogotá", "2026-09-10", "19:30",
-                CategoriaEvento.TEATRO, PoliticaEvento.REEMBOLSABLE_48H);
+            Evento obra = Evento.crear(
+                    "EVT-02", "Hamlet — Teatro Mayor", "Obra clásica de Shakespeare",
+                    "Bogotá", "2026-09-10", "19:30",
+                    CategoriaEvento.TEATRO, PoliticaEvento.REEMBOLSO);
 
-        Evento conferencia = Evento.crear(
-                "EVT-03", "TechTalk Colombia 2026", "Conferencia de tecnología e innovación",
-                "Medellín", "2026-07-20", "09:00",
-                CategoriaEvento.CONFERENCIA, PoliticaEvento.REEMBOLSABLE_48H);
+            Evento conferencia = Evento.crear(
+                    "EVT-03", "TechTalk Colombia 2026", "Conferencia de tecnología e innovación",
+                    "Medellín", "2026-07-20", "09:00",
+                    CategoriaEvento.CONFERENCIA, PoliticaEvento.CANCELACION);
 
         // Asignar recintos a los eventos
         if (concierto != null) concierto.getListRecintos().add(estadio);
@@ -168,43 +166,27 @@ public class App extends Application {
         if (concierto != null && !zonaVip.getListAsientos().isEmpty()) {
             // Asiento VIP-1-2 para la compra de Carlos
             Asiento asientoVip = zonaVip.getListAsientos().get(1);
-            asientoVip.reservar();
+                asientoVip.reservar();
 
-            EntradaBase entradaBase = new EntradaBase(
-                    "ENT-01", zonaVip.getPrecioBase(),
-                    EstadoEntrada.ACTIVA, asientoVip);
+                Entrada entradaVip = new Entrada(
+                        "ENT-01",
+                        zonaVip.getPrecioBase(),
+                        EstadoEntrada.ACTIVA,
+                        asientoVip);
 
-            // Decorar con acceso VIP
-            EntradaVIP entradaVip = new EntradaVIP(entradaBase);
+                Compra compra1 = new Compra(
+                        "CMP-01",
+                        "2026-05-10",
+                        entradaVip.getPrecioFinal(),
+                        u1,
+                        concierto,
+                        EstadoCompra.CREADA);
 
-            Compra compra1 = new Compra(
-                    "CMP-01",
-                    "2026-05-10",
-                    entradaVip.getPrecio(),
-                    u1,
-                    concierto,
-                    EstadoCompra.CREADA);
+                compra1.getListEntradas().add(entradaVip);
+                compra1.calcularTotal();
+                compra1.confirmarPago();
 
-            compra1.getListEntradas().add(entradaVip);
-
-            // Simular pago con tarjeta (Strategy)
-            PagoTarjeta pagoTarjeta = new PagoTarjeta(
-                    "4000000000001234", "Carlos Pérez", "11/27", "321");
-            compra1.confirmarPago(pagoTarjeta);   // Estado pasa a PAGADA
-
-            u1.getListCompras().add(compra1);
-
-            // Compra cancelada de María — para mostrar historial variado
-            Compra compra2 = new Compra(
-                    "CMP-02",
-                    "2026-05-08",
-                    180000,
-                    u2,
-                    concierto,
-                    EstadoCompra.CREADA);
-            compra2.cancelar();   // Estado pasa a CANCELADA
-
-            u2.getListCompras().add(compra2);
+                u1.getListCompras().add(compra1);
         }
 
         System.out.println("✅ Datos de prueba inicializados correctamente.");

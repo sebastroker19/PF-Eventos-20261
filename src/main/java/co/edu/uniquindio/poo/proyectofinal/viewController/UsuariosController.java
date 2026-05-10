@@ -201,15 +201,17 @@ public class UsuariosController implements Initializable {
             return;
         }
 
-        if (modoEdicion) {
-            // El Modelo actualiza los atributos del usuario existente
-            Usuario seleccionado = empresa.buscarUsuario(id);
-            if (seleccionado != null) {
-                seleccionado.actualizarPerfil(nombre, correo, telefono);
-                tablaUsuarios.refresh();
-                mostrarMensajeExito("Usuario actualizado correctamente.");
-            }
-        } else {
+            if (modoEdicion) {
+                Usuario seleccionado = empresa.buscarUsuario(id);
+                if (seleccionado != null) {
+                    seleccionado.setNombreCompleto(nombre);
+                    seleccionado.setCorreo(correo);
+                    seleccionado.setNumTelefono(telefono);
+                    tablaUsuarios.refresh();
+                    mostrarMensajeExito("Usuario actualizado correctamente.");
+                }
+            } else {
+
             // Construcción con el Builder del Modelo
             Usuario nuevoUsuario = new Usuario.Builder()
                     .idUsuario(id)
