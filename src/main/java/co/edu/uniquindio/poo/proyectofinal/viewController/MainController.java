@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo.proyectofinal.controller;
+package co.edu.uniquindio.poo.proyectofinal.viewController;
 
 import co.edu.uniquindio.poo.proyectofinal.model.*;
 import javafx.fxml.FXML;
@@ -67,19 +67,17 @@ public class MainController implements Initializable {
     private void cargarVista(String fxmlName, String titulo) {
         try {
             topbarTitle.setText(titulo);
-            URL fxmlUrl = getClass().getResource(
-                    "/co/edu/uniquindio/poo/proyectofinal/views/" + fxmlName);
+            // Referencia corregida para buscar en la carpeta de vistas desde el nuevo paquete
+            URL fxmlUrl = getClass().getResource("/co/edu/uniquindio/poo/proyectofinal/views/" + fxmlName);
 
             if (fxmlUrl == null) {
-                System.err.println("FXML no encontrado: " + fxmlName);
+                System.err.println("Error: No se encontró el archivo FXML: " + fxmlName);
                 return;
             }
 
             Parent vista = FXMLLoader.load(fxmlUrl);
             contentArea.getChildren().setAll(vista);
-
         } catch (IOException e) {
-            System.err.println("Error cargando vista " + fxmlName + ": " + e.getMessage());
             e.printStackTrace();
         }
     }

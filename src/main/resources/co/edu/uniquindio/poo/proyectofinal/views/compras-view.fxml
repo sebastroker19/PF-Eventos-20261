@@ -7,7 +7,7 @@
 <VBox spacing="20" styleClass="main-content"
       xmlns:fx="http://javafx.com/fxml"
       stylesheets="@../css/css.css"
-      fx:controller="co.edu.uniquindio.poo.proyectofinal.controller.ComprasController">
+      fx:controller="co.edu.uniquindio.poo.proyectofinal.viewController.ComprasController">
 
     <!-- Encabezado -->
     <HBox alignment="CENTER_LEFT" spacing="16">

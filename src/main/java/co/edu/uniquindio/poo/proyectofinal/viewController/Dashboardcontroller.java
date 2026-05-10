@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo.proyectofinal.controller;
+package co.edu.uniquindio.poo.proyectofinal.viewController;
 
 import co.edu.uniquindio.poo.proyectofinal.model.*;
 import javafx.collections.FXCollections;
@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.List;

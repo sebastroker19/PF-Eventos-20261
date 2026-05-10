@@ -3,13 +3,13 @@ module co.edu.uniquindio.poo.proyectofinal {
     requires javafx.fxml;
     requires javafx.graphics;
 
-    // Abrimos los paquetes para que JavaFX pueda trabajar
-    opens co.edu.uniquindio.poo.proyectofinal.controller to javafx.fxml;
-    opens co.edu.uniquindio.poo.proyectofinal.views to javafx.fxml;
+    // App principal necesita ser abierta para que JavaFX la cargue
+    opens co.edu.uniquindio.poo.proyectofinal to javafx.graphics, javafx.fxml;
 
-    // ESTO ES LO QUE HACE QUE EL CSS FUNCIONE
-    opens co.edu.uniquindio.poo.proyectofinal.css to javafx.graphics;
+    // FXMLLoader necesita acceso reflectivo a los controllers
+    opens co.edu.uniquindio.poo.proyectofinal.viewController to javafx.fxml;
 
-    // Exportamos el paquete principal (donde está tu clase App o Main)
-    exports co.edu.uniquindio.poo.proyectofinal;
+    // El modelo es accesible desde cualquier clase del módulo
+    exports co.edu.uniquindio.poo.proyectofinal.model;
+    exports co.edu.uniquindio.poo.proyectofinal.viewController;
 }

@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo.proyectofinal.controller;
+package co.edu.uniquindio.poo.proyectofinal.viewController;
 
 import co.edu.uniquindio.poo.proyectofinal.model.*;
 import javafx.beans.property.SimpleStringProperty;

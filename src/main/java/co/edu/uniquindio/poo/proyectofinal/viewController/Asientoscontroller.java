@@ -1,11 +1,10 @@
-package co.edu.uniquindio.poo.proyectofinal.controller;
+package co.edu.uniquindio.poo.proyectofinal.viewController;
 
 import co.edu.uniquindio.poo.proyectofinal.model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.List;
